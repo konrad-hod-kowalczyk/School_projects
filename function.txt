@@ -1,0 +1,1 @@
+sum(i=1->n)(exp(log10(silnia(i)))+silnia(i)/tan(x*i))/((x-5)*(x+3))
