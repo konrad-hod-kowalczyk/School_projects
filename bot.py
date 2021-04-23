@@ -84,4 +84,3 @@ async def monsterss(ctx):
     back.paste(new_im,(0,0),new_im)
     back.save('fight.png')
     await ctx.channel.send(file=discord.File('fight.png'))
-client.run('ODM1MDQ5OTIyNDQ0NTI1NTk4.YIJy1w.S1Mnzwe8xnyVyXPophw9KcSOULg')
