@@ -6,9 +6,10 @@ import time
 from PIL import Image
 
 def delete():
-    f = object()
+    global f
+    del f
 monsters = []
-class fight_class:
+class fight_class():
     def __init__(self, choice):
         self.back=''
         if(choice.lower()=='ruins'):
@@ -70,19 +71,20 @@ monsters.append(monster('Pliskin',12,12.0,0.1,6,0.25,0.8,0.1,0.2,0.25,['ruins','
 monsters.append(monster('Big_Adder',45,5.0,0.2,4,0.5,0.75,0.2,0.4,0.8,['ruins','weald','warrens','cove'],2))
 client = commands.Bot(command_prefix = '.')
 global f
-f = fight_class('ruins')
-donotdel = object()
-def create(loc):
-    f = fight_class(loc)
+f = object()
 @client.event
 async def on_ready():
     print('ready')
 @client.command()
 async def fight(ctx, loc):
-    create(loc)
+    global f
+    f = fight_class(loc)
 @client.command()
 async def clear(ctx, amount=5):
     await ctx.channel.purge(limit=amount)
+@client.command()
+async def retreat(ctx):
+    delete()
 @client.command()
 async def show(ctx):
     images = []
@@ -93,7 +95,8 @@ async def show(ctx):
     for im in images:
         width, height = im.size
         im=im.resize(((int)(width/3),(int)(height/3)))
-        new_im.paste(im, (x_offset,0))
+        width, height = im.size
+        new_im.paste(im, (x_offset,300-height))
         x_offset += im.size[0]
     back = Image.open(f.back+'.png')
     back = back.resize((600,300))
@@ -101,3 +104,4 @@ async def show(ctx):
     back.paste(new_im,(0,0),new_im)
     back.save('fight.png')
     await ctx.channel.send(file=discord.File('fight.png'))
+   
