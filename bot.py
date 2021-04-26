@@ -1,9 +1,14 @@
 import discord
 from discord.ext import commands
+from discord.ext import tasks
 import random
 import sys
 import time
+import asyncio
 from PIL import Image
+import datetime as dt
+import calendar as cl
+
 
 def delete():
     global f
@@ -72,19 +77,22 @@ monsters.append(monster('Big_Adder',45,5.0,0.2,4,0.5,0.75,0.2,0.4,0.8,['ruins','
 client = commands.Bot(command_prefix = '.')
 global f
 f = object()
-@client.event
-async def on_ready():
-    print('ready')
+@client.command()
+async def Help(ctx):
+    await ctx.channel.send('.fight *location* - starts a new fight in *location*\n.retreat - retreats from the fight\n.show - shows the enemies')
 @client.command()
 async def fight(ctx, loc):
     global f
     f = fight_class(loc)
+    await show(ctx)
 @client.command()
 async def clear(ctx, amount=5):
     await ctx.channel.purge(limit=amount)
 @client.command()
 async def retreat(ctx):
     delete()
+    #+stress
+    await ctx.channel.send('Party is retreating')
 @client.command()
 async def show(ctx):
     images = []
@@ -104,4 +112,15 @@ async def show(ctx):
     back.paste(new_im,(0,0),new_im)
     back.save('fight.png')
     await ctx.channel.send(file=discord.File('fight.png'))
-   
+@tasks.loop(minutes=1.0)
+async def reminder():
+    channel = client.get_channel(834863859403325520)
+    yy,mm,dd=dt.datetime.now().year,dt.datetime.now().month,dt.datetime.now().day
+    #role = discord.utils.get(channel.guild.roles, name='Sekretarz')
+    if(cl.weekday(yy,mm,dd)==0 and dt.datetime.now().hour==17 and dt.datetime.now().minute==30):
+        await channel.send("@everyone")
+        await channel.send("**Przypomnienie o spotkaniu koła**")
+@client.event
+async def on_ready():
+    print('ready')
+    reminder.start()
