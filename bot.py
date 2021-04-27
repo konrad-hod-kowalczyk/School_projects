@@ -152,14 +152,14 @@ async def join(ctx,name,quirks_char):
             await ctx.channel.send(f.chars)
 @tasks.loop(minutes=1.0)
 async def reminder():
-    channel = client.get_channel(834819880628518957)
+    channel = client.get_channel(0)
     yy,mm,dd=dt.datetime.now().year,dt.datetime.now().month,dt.datetime.now().day
     if(cl.weekday(yy,mm,dd)==3 and dt.datetime.now().hour==17 and dt.datetime.now().minute==30):
         await channel.send("@everyone")
         await channel.send("**Przypomnienie o spotkaniu koła**")
 @tasks.loop(hours=1.0)
 async def testing():
-    channel = client.get_channel(834863859403325520)
+    channel = client.get_channel(0)
     role = discord.utils.get(channel.guild.members, display_name='Konrad K')
     #role = discord.utils.get(channel.guild.roles, name='Sekretarz')
     #await channel.send(f"{role.mention}")
