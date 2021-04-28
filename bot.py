@@ -8,6 +8,7 @@ import asyncio
 from PIL import Image
 import datetime as dt
 import calendar as cl
+from copy import deepcopy
 intents = discord.Intents.default()
 intents.members = True
 client = commands.Bot(command_prefix = '.', intents=intents)
@@ -108,12 +109,29 @@ monsters.append(monster('Pliskin','beast',12,12.0,0.1,6,0.25,0.8,0.1,0.2,0.25,['
 monsters.append(monster('Big_Adder','beast',45,5.0,0.2,4,0.5,0.75,0.2,0.4,0.8,['ruins','weald','warrens','cove'],2))
 quirks.append(quirk('beast_hater','positive',['+0.15 dmg','-0.15 beast_stress']))
 classes.append(class_char('vestal',24,0,0,4,0,0.01,4,8,0.3,0.3,0.3,0.3,0.4,0.3,0.1,0.67))
+classes.append(class_char('shieldbreaker',20,8,0,5,0,0.06,5,10,0.5,0.2,0.3,0.5,0.3,0.3,0.2,0.67))
+classes.append(class_char('abomination',26,7.5,0,7,0,0.02,6,11,0.4,0.6,0.2,0.4,0.3,0.2,0.1,0.67))
+classes.append(class_char('antiquarian',17,10,0,5,0,0.01,3,5,0.2,0.2,0.2,0.2,0.2,0.2,0.1,0.67))
+classes.append(class_char('arbalest',27,0,0,3,0,0.06,4,8,0.4,0.3,0.3,0.4,0.3,0.3,0.1,0.67))
+classes.append(class_char('bounty_hunter',25,5,0,5,0,0.04,5,10,0.4,0.3,0.2,0.4,0.3,0.3,0.4,0.67))
+classes.append(class_char('crusader',33,5,0,1,0,0.03,6,12,0.4,0.3,0.3,0.4,0.3,0.3,0.1,0.67))
+classes.append(class_char('flagellant',22,0,0,6,0,0.02,3,6,0.5,0.3,0.4,0.5,0.65,0.3,0.0,0.73))
+classes.append(class_char('grave_robber',20,10,0,8,0,0.06,4,8,0.2,0.5,0.3,0.2,0.3,0.3,0.5,0.67))
+classes.append(class_char('hellion',26,10,0,4,0,0.05,6,12,0.4,0.4,0.3,0.4,0.4,0.3,0.2,0.67))
+classes.append(class_char('highwayman',23,10,0,5,0,0.05,5,10,0.3,0.3,0.3,0.3,0.3,0.3,0.4,0.67))
+classes.append(class_char('houndmaster',21,10,0,5,0,0.04,4,7,0.4,0.4,0.3,0.4,0.4,0.3,0.4,0.67))
+classes.append(class_char('jester',19,15,0,7,0,0.04,4,7,0.2,0.4,0.2,0.2,0.3,0.4,0.3,0.67))
+classes.append(class_char('leper',35,0,0,2,0,0.01,8,16,0.6,0.4,0.2,0.6,0.1,0.4,0.1,0.67))
+classes.append(class_char('man-at-arms',31,5,0,3,0,0.02,5,9,0.4,0.3,0.3,0.4,0.4,0.3,0.1,0.67))
+classes.append(class_char('musketeer',27,0,0,3,0,0.06,4,8,0.4,0.3,0.3,0.4,0.3,0.3,0.1,0.67))
+classes.append(class_char('occultist',19,10,0,6,0,0.06,4,7,0.2,0.3,0.4,0.2,0.4,0.6,0.1,0.67))
+classes.append(class_char('plague_doctor',22,0,0,7,0,0.02,4,7,0.2,0.6,0.5,0.2,0.2,0.5,0.2,0.67))
 client = commands.Bot(command_prefix = '.', intents=intents)
 global f
 f = object()
 @client.command()
 async def Help(ctx):
-    await ctx.channel.send('.fight *location* - starts a new fight in *location* [ruins,weald,warrens,cove]\n.retreat - retreats from the fight\n.show - shows the enemies\n.join name [quirks], quirks must be in format: word_word if they consist of more than one')
+    await ctx.channel.send('.fight *location* - starts a new fight in *location* [ruins,weald,warrens,cove]\n.retreat - retreats from the fight\n.show - shows the enemies\n.join name [quirks] (quirks must be in format: word_word if they consist of more than one, separated by ,)')
 @client.command()
 async def fight(ctx, loc):
     delete()
@@ -124,6 +142,9 @@ async def fight(ctx, loc):
 async def clear(ctx, amount=5):
     await ctx.channel.purge(limit=amount)
 @client.command()
+async def class_list(ctx):
+    await ctx.channel.send("Names of classes:\nvestal\nshieldbreaker\nabomination\nantiquarian\narbalest\nbounty_hunter\ncrusader\nflagellant\ngrave_robber\nhellion\nhighwayman\nhoundmaster\njester\nleper\nman-at-arms\nmusketeer\noccultist\nplague_doctor \n(letter sizes doesn't matter)")
+@client.command()
 async def retreat(ctx):
     delete()
     #+stress
@@ -133,13 +154,14 @@ async def show(ctx):
     images = []
     for i in f.cmonsters:
         images.append(Image.open(i.name+'.png'))
-    new_im = Image.new('RGBA', (600, 300))
+    new_im = Image.new('RGBA', (1000, 300))
     x_offset = 0
     back_width = 0
     for i in f.chars:
         imag = Image.open(i[1].name+'.png')
-        images.append(imag,(x_offset,150-imag.size[1]))
-        x_offset +=imag.size[0]
+        new_im.paste(imag,(x_offset,150))
+        x_offset += imag.size[0]
+        back_width += imag.size[0]
     for im in images:
         width, height = im.size
         im=im.resize(((int)(width/3),(int)(height/3)))
@@ -149,7 +171,7 @@ async def show(ctx):
         new_im.paste(im, (x_offset,300-height))
         x_offset += im.size[0]
     back = Image.open(f.back+'.png')
-    back = back.resize((600,300))
+    back = back.resize((1000,300))
     back = back.crop((0,0,back_width,300))
     
     back.paste(new_im,(0,0),new_im)
@@ -177,10 +199,11 @@ async def join(ctx,klass,name,quirks_char):
         for prof in classes:
             if prof.name == klass.lower():
                 klass = prof
+                break
         if(good>5 or bad>5):
             await ctx.channel.send("Too much quirks of one type")
         else:
-            f.chars.append([ctx.author.id,klass,name,final])
+            f.chars.append([ctx.author.id,deepcopy(klass),name,final])
             await show(ctx)
 @tasks.loop(minutes=1.0)
 async def reminder():
