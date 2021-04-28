@@ -9,6 +9,7 @@ from PIL import Image
 import datetime as dt
 import calendar as cl
 from copy import deepcopy
+from discord import FFmpegPCMAudio
 intents = discord.Intents.default()
 intents.members = True
 client = commands.Bot(command_prefix = '.', intents=intents)
@@ -102,8 +103,8 @@ class skill:
         self.effects = effects
         self.Self = Self
 monsters.append(monster('Bone_Rabble','unholy',8,0.0,0.0,1,0.1,0.1,2.0,0.15,0.1,['ruins','weald','warrens','cove'],1))
-monsters[0].skills.append(skill('Bump in the night','melee',[1,2,3],[1,2],lambda: randint(2,5),0,62.5,0.02,None,None))
-monsters[0].skills.append(skill('Tic-Toc','melee',[4],[1,2],lambda: randint(2,5),0,42.5,0.00,None,None))
+monsters[0].skills.append(skill('Bump in the night','melee',[1,2,3],[1,2],lambda: random.randint(2,5),0,62.5,0.02,None,None))
+monsters[0].skills.append(skill('Tic-Toc','melee',[4],[1,2],lambda: random.randint(2,5),0,42.5,0.00,None,None))
 monsters.append(monster('Webber','beast',7,15.0,0.0,5,0.25,0.2,0.2,0.1,0.1,['ruins','weald','warrens','cove'],1))
 monsters.append(monster('Spitter','beast',7,15.0,0.0,4,0.25,0.2,0.2,0.1,0.1,['ruins','weald','warrens','cove'],1))
 monsters.append(monster('Maggot','beast',6,0.0,0.0,3,1.0,0.4,0.4,0.6,0.0,['ruins','weald','warrens','cove'],1))
@@ -194,6 +195,11 @@ async def show(ctx):
     back.save('fight.png')
     await ctx.channel.send(file=discord.File('fight.png'))
 @client.command()
+async def rand(ctx):
+    for i in range(4):
+        f.chars.append([ctx.author.id,deepcopy(random.choice(classes)),'test'+str(random.randint(0,10000)),[]])
+    await show(ctx)
+@client.command()
 async def join(ctx,klass,name,quirks_char):
     quirks_char = quirks_char.strip('[')
     quirks_char = quirks_char.strip(']')
@@ -221,6 +227,19 @@ async def join(ctx,klass,name,quirks_char):
         else:
             f.chars.append([ctx.author.id,deepcopy(klass),name,final])
             await show(ctx)
+@client.command(pass_context=True)
+async def whispers(ctx):
+    if(ctx.author.voice):
+        channel = ctx.message.author.voice.channel
+        voice = await channel.connect()
+        await ctx.channel.send("Voice of Il'gynoth is playing...")
+        voice.play(FFmpegPCMAudio('C:\\Users\\zaras\\Desktop\\koło\\PythON\\heart.mp3'))
+        while voice.is_playing():
+            await asyncio.sleep(0.1)
+        await voice.disconnect()
+        await ctx.channel.send("Voice of Il'gynoth has stopped")
+    else:
+        await ctx.channel.send('You are not on the voice channel')
 @tasks.loop(minutes=1.0)
 async def reminder():
     channel = client.get_channel(0)
