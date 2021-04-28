@@ -34,8 +34,8 @@ class fight_class():
             delete()
         self.cmonsters = [];
         while(len(self.cmonsters)!=4):
-            self.cmonsters.append(monsters[random.randint(0,len(monsters)-1)])
-            if(self.back not in self.cmonsters[len(self.cmonsters)-1].locations or sum(c.size for c in self.cmonsters)>4):
+            self.cmonsters.append(deepcopy(monsters[random.randint(0,len(monsters)-1)]))
+            if(sum(c.size for c in self.cmonsters)>4):
                 self.cmonsters.pop(len(self.cmonsters)-1)
                 break
         self.chars = []
@@ -61,6 +61,7 @@ class monster:
         self.locations=[]
         for i in range(len(loc)):
             self.locations.append(loc[i])
+        self.skills = []
 class quirk:
     def __init__(self,name,type,effects):
         self.name=name
@@ -70,7 +71,7 @@ class quirk:
             effect = effect.split(' ')
             self.effects.append([float(effect[0]),effect[1]])
 class class_char:
-    def __init__(self,name,max_hp,dodge,prot,spd,acc_mod,crit,dmg_min,dmg_max,stun,blight,disease,move,bleed,debuff,trap,death_blow):
+    def __init__(self,name,max_hp,dodge,prot,spd,acc_mod,crit,stun,blight,disease,move,bleed,debuff,trap,death_blow):
         self.name = name
         self.max_hp = max_hp
         self.dodge = dodge
@@ -78,8 +79,6 @@ class class_char:
         self.spd = spd
         self.acc_mod = acc_mod 
         self.crit = crit 
-        self.dmg_min = dmg_min 
-        self.dmg_max = dmg_max
         self.stun = stun 
         self.blight = blight
         self.disease = disease 
@@ -88,7 +87,23 @@ class class_char:
         self.debuff = debuff 
         self.trap = trap 
         self.death_blow = death_blow
+        self.skills = []
+        self.stress=0
+class skill:
+    def __init__(self,name,type,ranks,target,dmg,dmg_mod,acc,crit_mod,effects,Self):
+        self.name = name
+        self.type = type
+        self.ranks = ranks
+        self.target = target
+        self.dmg = dmg
+        self.dmg_mod = dmg_mod
+        self.acc = acc 
+        self.crit_mod = crit_mod
+        self.effects = effects
+        self.Self = Self
 monsters.append(monster('Bone_Rabble','unholy',8,0.0,0.0,1,0.1,0.1,2.0,0.15,0.1,['ruins','weald','warrens','cove'],1))
+monsters[0].skills.append(skill('Bump in the night','melee',[1,2,3],[1,2],lambda: randint(2,5),0,62.5,0.02,None,None))
+monsters[0].skills.append(skill('Tic-Toc','melee',[4],[1,2],lambda: randint(2,5),0,42.5,0.00,None,None))
 monsters.append(monster('Webber','beast',7,15.0,0.0,5,0.25,0.2,0.2,0.1,0.1,['ruins','weald','warrens','cove'],1))
 monsters.append(monster('Spitter','beast',7,15.0,0.0,4,0.25,0.2,0.2,0.1,0.1,['ruins','weald','warrens','cove'],1))
 monsters.append(monster('Maggot','beast',6,0.0,0.0,3,1.0,0.4,0.4,0.6,0.0,['ruins','weald','warrens','cove'],1))
@@ -108,24 +123,24 @@ monsters.append(monster('Rattler','beast',24,7.5,0.25,9,0.25,0.4,0.2,0.2,0.5,['r
 monsters.append(monster('Pliskin','beast',12,12.0,0.1,6,0.25,0.8,0.1,0.2,0.25,['ruins','weald','warrens','cove'],1))
 monsters.append(monster('Big_Adder','beast',45,5.0,0.2,4,0.5,0.75,0.2,0.4,0.8,['ruins','weald','warrens','cove'],2))
 quirks.append(quirk('beast_hater','positive',['+0.15 dmg','-0.15 beast_stress']))
-classes.append(class_char('vestal',24,0,0,4,0,0.01,4,8,0.3,0.3,0.3,0.3,0.4,0.3,0.1,0.67))
-classes.append(class_char('shieldbreaker',20,8,0,5,0,0.06,5,10,0.5,0.2,0.3,0.5,0.3,0.3,0.2,0.67))
-classes.append(class_char('abomination',26,7.5,0,7,0,0.02,6,11,0.4,0.6,0.2,0.4,0.3,0.2,0.1,0.67))
-classes.append(class_char('antiquarian',17,10,0,5,0,0.01,3,5,0.2,0.2,0.2,0.2,0.2,0.2,0.1,0.67))
-classes.append(class_char('arbalest',27,0,0,3,0,0.06,4,8,0.4,0.3,0.3,0.4,0.3,0.3,0.1,0.67))
-classes.append(class_char('bounty_hunter',25,5,0,5,0,0.04,5,10,0.4,0.3,0.2,0.4,0.3,0.3,0.4,0.67))
-classes.append(class_char('crusader',33,5,0,1,0,0.03,6,12,0.4,0.3,0.3,0.4,0.3,0.3,0.1,0.67))
-classes.append(class_char('flagellant',22,0,0,6,0,0.02,3,6,0.5,0.3,0.4,0.5,0.65,0.3,0.0,0.73))
-classes.append(class_char('grave_robber',20,10,0,8,0,0.06,4,8,0.2,0.5,0.3,0.2,0.3,0.3,0.5,0.67))
-classes.append(class_char('hellion',26,10,0,4,0,0.05,6,12,0.4,0.4,0.3,0.4,0.4,0.3,0.2,0.67))
-classes.append(class_char('highwayman',23,10,0,5,0,0.05,5,10,0.3,0.3,0.3,0.3,0.3,0.3,0.4,0.67))
-classes.append(class_char('houndmaster',21,10,0,5,0,0.04,4,7,0.4,0.4,0.3,0.4,0.4,0.3,0.4,0.67))
-classes.append(class_char('jester',19,15,0,7,0,0.04,4,7,0.2,0.4,0.2,0.2,0.3,0.4,0.3,0.67))
-classes.append(class_char('leper',35,0,0,2,0,0.01,8,16,0.6,0.4,0.2,0.6,0.1,0.4,0.1,0.67))
-classes.append(class_char('man-at-arms',31,5,0,3,0,0.02,5,9,0.4,0.3,0.3,0.4,0.4,0.3,0.1,0.67))
-classes.append(class_char('musketeer',27,0,0,3,0,0.06,4,8,0.4,0.3,0.3,0.4,0.3,0.3,0.1,0.67))
-classes.append(class_char('occultist',19,10,0,6,0,0.06,4,7,0.2,0.3,0.4,0.2,0.4,0.6,0.1,0.67))
-classes.append(class_char('plague_doctor',22,0,0,7,0,0.02,4,7,0.2,0.6,0.5,0.2,0.2,0.5,0.2,0.67))
+classes.append(class_char('vestal',24,0,0,4,0,0.01,0.3,0.3,0.3,0.3,0.4,0.3,0.1,0.67))
+classes.append(class_char('shieldbreaker',20,8,0,5,0,0.06,0.5,0.2,0.3,0.5,0.3,0.3,0.2,0.67))
+classes.append(class_char('abomination',26,7.5,0,7,0,0.02,0.4,0.6,0.2,0.4,0.3,0.2,0.1,0.67))
+classes.append(class_char('antiquarian',17,10,0,5,0,0.01,0.2,0.2,0.2,0.2,0.2,0.2,0.1,0.67))
+classes.append(class_char('arbalest',27,0,0,3,0,0.06,0.4,0.3,0.3,0.4,0.3,0.3,0.1,0.67))
+classes.append(class_char('bounty_hunter',25,5,0,5,0,0.04,0.4,0.3,0.2,0.4,0.3,0.3,0.4,0.67))
+classes.append(class_char('crusader',33,5,0,1,0,0.03,0.4,0.3,0.3,0.4,0.3,0.3,0.1,0.67))
+classes.append(class_char('flagellant',22,0,0,6,0,0.02,0.5,0.3,0.4,0.5,0.65,0.3,0.0,0.73))
+classes.append(class_char('grave_robber',20,10,0,8,0,0.06,0.2,0.5,0.3,0.2,0.3,0.3,0.5,0.67))
+classes.append(class_char('hellion',26,10,0,4,0,0.05,0.4,0.4,0.3,0.4,0.4,0.3,0.2,0.67))
+classes.append(class_char('highwayman',23,10,0,5,0,0.05,0.3,0.3,0.3,0.3,0.3,0.3,0.4,0.67))
+classes.append(class_char('houndmaster',21,10,0,5,0,0.04,0.4,0.4,0.3,0.4,0.4,0.3,0.4,0.67))
+classes.append(class_char('jester',19,15,0,7,0,0.04,0.2,0.4,0.2,0.2,0.3,0.4,0.3,0.67))
+classes.append(class_char('leper',35,0,0,2,0,0.01,0.6,0.4,0.2,0.6,0.1,0.4,0.1,0.67))
+classes.append(class_char('man-at-arms',31,5,0,3,0,0.02,0.4,0.3,0.3,0.4,0.4,0.3,0.1,0.67))
+classes.append(class_char('musketeer',27,0,0,3,0,0.06,0.4,0.3,0.3,0.4,0.3,0.3,0.1,0.67))
+classes.append(class_char('occultist',19,10,0,6,0,0.06,0.2,0.3,0.4,0.2,0.4,0.6,0.1,0.67))
+classes.append(class_char('plague_doctor',22,0,0,7,0,0.02,0.2,0.6,0.5,0.2,0.2,0.5,0.2,0.67))
 client = commands.Bot(command_prefix = '.', intents=intents)
 global f
 f = object()
@@ -157,8 +172,8 @@ async def show(ctx):
     new_im = Image.new('RGBA', (1000, 300))
     x_offset = 0
     back_width = 0
-    for i in f.chars:
-        imag = Image.open(i[1].name+'.png')
+    for i in range(len(f.chars)-1,-1,-1):
+        imag = Image.open(f.chars[i][1].name+'.png')
         new_im.paste(imag,(x_offset,150))
         x_offset += imag.size[0]
         back_width += imag.size[0]
@@ -173,7 +188,8 @@ async def show(ctx):
     back = Image.open(f.back+'.png')
     back = back.resize((1000,300))
     back = back.crop((0,0,back_width,300))
-    
+    for i in f.chars:
+            print(i[2])
     back.paste(new_im,(0,0),new_im)
     back.save('fight.png')
     await ctx.channel.send(file=discord.File('fight.png'))
