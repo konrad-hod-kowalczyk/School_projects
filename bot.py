@@ -16,6 +16,7 @@ def delete():
     del f
 monsters = []
 quirks = []
+classes = []
 class fight_class():
     def __init__(self, choice):
         self.back=''
@@ -67,6 +68,25 @@ class quirk:
         for effect in effects:
             effect = effect.split(' ')
             self.effects.append([float(effect[0]),effect[1]])
+class class_char:
+    def __init__(self,name,max_hp,dodge,prot,spd,acc_mod,crit,dmg_min,dmg_max,stun,blight,disease,move,bleed,debuff,trap,death_blow):
+        self.name = name
+        self.max_hp = max_hp
+        self.dodge = dodge
+        self.prot = prot 
+        self.spd = spd
+        self.acc_mod = acc_mod 
+        self.crit = crit 
+        self.dmg_min = dmg_min 
+        self.dmg_max = dmg_max
+        self.stun = stun 
+        self.blight = blight
+        self.disease = disease 
+        self.move = move 
+        self.bleed = bleed 
+        self.debuff = debuff 
+        self.trap = trap 
+        self.death_blow = death_blow
 monsters.append(monster('Bone_Rabble','unholy',8,0.0,0.0,1,0.1,0.1,2.0,0.15,0.1,['ruins','weald','warrens','cove'],1))
 monsters.append(monster('Webber','beast',7,15.0,0.0,5,0.25,0.2,0.2,0.1,0.1,['ruins','weald','warrens','cove'],1))
 monsters.append(monster('Spitter','beast',7,15.0,0.0,4,0.25,0.2,0.2,0.1,0.1,['ruins','weald','warrens','cove'],1))
@@ -86,7 +106,8 @@ monsters.append(monster('Castellan','bloodsucker',12,21.0,0.0,5,0.5,0.6,0.25,0.5
 monsters.append(monster('Rattler','beast',24,7.5,0.25,9,0.25,0.4,0.2,0.2,0.5,['ruins','weald','warrens','cove'],1))
 monsters.append(monster('Pliskin','beast',12,12.0,0.1,6,0.25,0.8,0.1,0.2,0.25,['ruins','weald','warrens','cove'],1))
 monsters.append(monster('Big_Adder','beast',45,5.0,0.2,4,0.5,0.75,0.2,0.4,0.8,['ruins','weald','warrens','cove'],2))
-quirks.append(quirk('Beast Hater','positive',['+0.15 dmg','-0.15 beast_stress']))
+quirks.append(quirk('beast_hater','positive',['+0.15 dmg','-0.15 beast_stress']))
+classes.append(class_char('vestal',24,0,0,4,0,0.01,4,8,0.3,0.3,0.3,0.3,0.4,0.3,0.1,0.67))
 client = commands.Bot(command_prefix = '.', intents=intents)
 global f
 f = object()
@@ -115,11 +136,16 @@ async def show(ctx):
     new_im = Image.new('RGBA', (600, 300))
     x_offset = 0
     back_width = 0
+    for i in f.chars:
+        imag = Image.open(i[1].name+'.png')
+        images.append(imag,(x_offset,150-imag.size[1]))
+        x_offset +=imag.size[0]
     for im in images:
         width, height = im.size
         im=im.resize(((int)(width/3),(int)(height/3)))
         width, height = im.size
         back_width += width
+        im=im.transpose(Image.FLIP_LEFT_RIGHT)
         new_im.paste(im, (x_offset,300-height))
         x_offset += im.size[0]
     back = Image.open(f.back+'.png')
@@ -130,26 +156,32 @@ async def show(ctx):
     back.save('fight.png')
     await ctx.channel.send(file=discord.File('fight.png'))
 @client.command()
-async def join(ctx,name,quirks_char):
-    final = []
-    good = 0
-    bad = 0
-    if(len(quirks_char)>10):
+async def join(ctx,klass,name,quirks_char):
+    quirks_char = quirks_char.strip('[')
+    quirks_char = quirks_char.strip(']')
+    array = quirks_char.split(',')
+    if(len(array)>10):
         await ctx.channel.send("Too much quirks you liar")
     else:
-        for i in range(len(quirks_char)):
+        final = []
+        good = 0
+        bad = 0
+        for i in range(len(array)):
             for quirk in quirks:
-                if quirks_char == quirk.name:
+                if array == quirk.name:
                     final.append(quirk)
                     if quirk.type=='positive':
                         good+=1
                     else:
                         bad+=1
+        for prof in classes:
+            if prof.name == klass.lower():
+                klass = prof
         if(good>5 or bad>5):
             await ctx.channel.send("Too much quirks of one type")
         else:
-            f.chars.append([ctx.author.id,name,quirks_char])
-            await ctx.channel.send(f.chars)
+            f.chars.append([ctx.author.id,klass,name,final])
+            await show(ctx)
 @tasks.loop(minutes=1.0)
 async def reminder():
     channel = client.get_channel(0)
@@ -160,7 +192,7 @@ async def reminder():
 @tasks.loop(hours=1.0)
 async def testing():
     channel = client.get_channel(0)
-    role = discord.utils.get(channel.guild.members, display_name='Konrad K')
+    role = discord.utils.get(channel.guild.members, name='Evile')
     #role = discord.utils.get(channel.guild.roles, name='Sekretarz')
     #await channel.send(f"{role.mention}")
 @client.event
