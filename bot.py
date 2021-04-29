@@ -1,6 +1,5 @@
 import discord
-from discord.ext import commands
-from discord.ext import tasks
+from discord.ext import commands,tasks
 import random
 import sys
 import time
@@ -10,15 +9,39 @@ import datetime as dt
 import calendar as cl
 from copy import deepcopy
 from discord import FFmpegPCMAudio
+
 intents = discord.Intents.default()
 intents.members = True
 client = commands.Bot(command_prefix = '.', intents=intents)
+client.remove_command('help')
 def delete():
     global f
-    del f
+    f = object()
 monsters = []
 quirks = []
 classes = []
+def quicksort(tab,l,p):
+    v = tab[int((l+p)/2)][1]
+    i=l
+    j=p
+    while True:
+        while tab[i][1]>v:
+            i+=1
+        while tab[j][1]<v:
+            j-=1
+        if i<=j:
+            x=tab[i]
+            tab[i]=tab[j]
+            tab[j]=x
+            i+=1
+            j-=1
+        if i>j:
+            break
+    if j > l:
+        quicksort(tab,l,j)
+    if i < p:
+        quicksort(tab,i,p)
+    return tab
 class fight_class():
     def __init__(self, choice):
         self.back=''
@@ -91,7 +114,7 @@ class class_char:
         self.skills = []
         self.stress=0
 class skill:
-    def __init__(self,name,type,ranks,target,dmg,dmg_mod,acc,crit_mod,effects,Self):
+    def __init__(self,name,type,ranks,target,dmg,dmg_mod,acc,crit_mod,effects):
         self.name = name
         self.type = type
         self.ranks = ranks
@@ -101,10 +124,9 @@ class skill:
         self.acc = acc 
         self.crit_mod = crit_mod
         self.effects = effects
-        self.Self = Self
 monsters.append(monster('Bone_Rabble','unholy',8,0.0,0.0,1,0.1,0.1,2.0,0.15,0.1,['ruins','weald','warrens','cove'],1))
-monsters[0].skills.append(skill('Bump in the night','melee',[1,2,3],[1,2],lambda: random.randint(2,5),0,62.5,0.02,None,None))
-monsters[0].skills.append(skill('Tic-Toc','melee',[4],[1,2],lambda: random.randint(2,5),0,42.5,0.00,None,None))
+monsters[0].skills.append(skill('Bump in the night','melee',[1,2,3],[1,2],lambda: random.randint(2,5),0,62.5,0.02,None))
+monsters[0].skills.append(skill('Tic-Toc','melee',[4],[1,2],lambda: random.randint(2,5),0,42.5,0.00,None))
 monsters.append(monster('Webber','beast',7,15.0,0.0,5,0.25,0.2,0.2,0.1,0.1,['ruins','weald','warrens','cove'],1))
 monsters.append(monster('Spitter','beast',7,15.0,0.0,4,0.25,0.2,0.2,0.1,0.1,['ruins','weald','warrens','cove'],1))
 monsters.append(monster('Maggot','beast',6,0.0,0.0,3,1.0,0.4,0.4,0.6,0.0,['ruins','weald','warrens','cove'],1))
@@ -142,12 +164,31 @@ classes.append(class_char('man-at-arms',31,5,0,3,0,0.02,0.4,0.3,0.3,0.4,0.4,0.3,
 classes.append(class_char('musketeer',27,0,0,3,0,0.06,0.4,0.3,0.3,0.4,0.3,0.3,0.1,0.67))
 classes.append(class_char('occultist',19,10,0,6,0,0.06,0.2,0.3,0.4,0.2,0.4,0.6,0.1,0.67))
 classes.append(class_char('plague_doctor',22,0,0,7,0,0.02,0.2,0.6,0.5,0.2,0.2,0.5,0.2,0.67))
-client = commands.Bot(command_prefix = '.', intents=intents)
 global f
 f = object()
 @client.command()
-async def Help(ctx):
-    await ctx.channel.send('.fight *location* - starts a new fight in *location* [ruins,weald,warrens,cove]\n.retreat - retreats from the fight\n.show - shows the enemies\n.join name [quirks] (quirks must be in format: word_word if they consist of more than one, separated by ,)')
+async def help(ctx,option=None):
+    if(option=='fight'):
+        embed = discord.Embed(title='fight',description='Darkest Dungeon Combat Simulator version: alpha 0.0.1',colour = discord.Colour.green())
+        embed.add_field(name='fight *location*',value='starts a new fight in *location*',inline=True)
+        embed.add_field(name='retreat',value='retreats from the fight',inline=True)
+        embed.add_field(name='show',value='shows the composition of characters and enemies',inline=True)
+        embed.add_field(name='join *name* *[quirks]*',value='join with chosen character, quirks must be one word each. For two words quirks use word_word. If no quirks write only []',inline=False)
+        embed.add_field(name='rand',value='generates random party of 4',inline=True)
+        embed.add_field(name='class_list',value='shows available classes',inline=True)
+        embed.set_thumbnail(url='https://www.darkestdungeon.com/wp-content/uploads/2017/09/PAX-Wallpaper.jpg')
+        embed.set_image(url='https://www.darkestdungeon.com/wp-content/uploads/2017/09/Town_Event_Promo_Desktop2.jpg')
+        embed.set_footer(text='available locations: [ruins,weald,warrens,cove]')
+        await ctx.channel.send(embed=embed)
+    elif(option=='whispers'):
+        embed = discord.Embed(title = 'Whispers :smiling_imp:',description = "Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn",colour = discord.Colour.red())
+        embed.add_field(name="Il'gynoth",value='Heart_of_corruption.mp3',inline=True)
+        await ctx.channel.send(embed=embed)
+    else:
+        embed = discord.Embed(title='bot functionality',colour=discord.Colour.blue())
+        embed.add_field(name='fight', value='```to see more type .help fight```',inline=True)
+        embed.add_field(name='whispers', value='```to see more type .help whispers```',inline=True)
+        await ctx.channel.send(embed=embed)
 @client.command()
 async def fight(ctx, loc):
     delete()
@@ -159,12 +200,43 @@ async def clear(ctx, amount=5):
     await ctx.channel.purge(limit=amount)
 @client.command()
 async def class_list(ctx):
-    await ctx.channel.send("Names of classes:\nvestal\nshieldbreaker\nabomination\nantiquarian\narbalest\nbounty_hunter\ncrusader\nflagellant\ngrave_robber\nhellion\nhighwayman\nhoundmaster\njester\nleper\nman-at-arms\nmusketeer\noccultist\nplague_doctor \n(letter sizes doesn't matter)")
+    embed = discord.Embed(title='classes',description="letter sizes don't matter",colour = discord.Colour.green())
+    embed.add_field(name='```vestal```',inline=True)
+    embed.add_field(name='```shieldbreaker```',inline=True)
+    embed.add_field(name='```abomination```',inline=True)
+    embed.add_field(name='```antiquarian```',inline=True)
+    embed.add_field(name='```arbalest```',inline=True)
+    embed.add_field(name='```bounty_hunter```',inline=True)
+    embed.add_field(name='```crusader```',inline=True)
+    embed.add_field(name='```flagellant```',inline=True)
+    embed.add_field(name='```grave_robber```',inline=True)
+    embed.add_field(name='```highwayman```',inline=True)
+    embed.add_field(name='```houndmaster```',inline=True)
+    embed.add_field(name='```jester```',inline=True)
+    embed.add_field(name='```leper```',inline=True)
+    embed.add_field(name='```man-at-arms```',inline=True)
+    embed.add_field(name='```musketeer```',inline=True)
+    embed.add_field(name='```occultist```',inline=True)
+    embed.add_field(name='```plague_doctor```',inline=True)
+    await ctx.channel.send(embed=embed)
 @client.command()
 async def retreat(ctx):
     delete()
     #+stress
     await ctx.channel.send('Party is retreating')
+@client.command()
+async def start(ctx):
+    global f
+    while(1):
+        order = []
+        for i in f.cmonsters:
+            order.append([i,random.randint(0,8)+i.speed])
+        for i in f.chars:
+            order.append([i,random.randint(0,8)+i[1].spd])
+        order = quicksort(order,0,len(order)-1)
+        #for i in range(len(order)):
+        #    print(order[i][1])
+        #print('------------------')
 @client.command()
 async def show(ctx):
     images = []
@@ -240,6 +312,18 @@ async def whispers(ctx):
         await ctx.channel.send("Voice of Il'gynoth has stopped")
     else:
         await ctx.channel.send('You are not on the voice channel')
+@client.command(pass_context=True)
+async def obecnosc(ctx):
+    if(ctx.author.voice):
+        channel = ctx.message.author.voice.channel
+        members = channel.members
+        ids=[]
+        for member in members:
+            ids.append(member.display_name)
+        ids = (str(dt.datetime.now().day)+'.'+str(dt.datetime.now().month)+'.'+str(dt.datetime.now().year)+'  '+str(dt.datetime.now().hour)+':'+str(dt.datetime.now().minute),ids)
+        await ctx.channel.send(ids)
+    else:
+        await ctx.channel.send('Nie jesteś na spotkaniu')
 @tasks.loop(minutes=1.0)
 async def reminder():
     channel = client.get_channel(0)
