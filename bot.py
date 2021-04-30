@@ -86,6 +86,8 @@ class monster:
         for i in range(len(loc)):
             self.locations.append(loc[i])
         self.skills = []
+        self.buffs = []
+        self.debuffs = []
 class quirk:
     def __init__(self,name,type,effects):
         self.name=name
@@ -113,6 +115,8 @@ class class_char:
         self.death_blow = death_blow
         self.skills = []
         self.stress=0
+        self.buffs = []
+        self.debuffs = []
 class skill:
     def __init__(self,name,type,ranks,target,dmg,dmg_mod,acc,crit_mod,effects):
         self.name = name
@@ -125,26 +129,60 @@ class skill:
         self.crit_mod = crit_mod
         self.effects = effects
 monsters.append(monster('Bone_Rabble','unholy',8,0.0,0.0,1,0.1,0.1,2.0,0.15,0.1,['ruins','weald','warrens','cove'],1))
-monsters[0].skills.append(skill('Bump in the night','melee',[1,2,3],[1,2],lambda: random.randint(2,5),0,62.5,0.02,None))
-monsters[0].skills.append(skill('Tic-Toc','melee',[4],[1,2],lambda: random.randint(2,5),0,42.5,0.00,None))
+monsters[0].skills.append(skill('Bump in the night','melee',[1,2,3],[1,2],lambda: random.randint(2,5),0,0.625,0.02,None))
+monsters[0].skills.append(skill('Tic-Toc','melee',[4],[1,2],lambda: random.randint(2,5),0,0.425,0.00,None))
 monsters.append(monster('Webber','beast',7,15.0,0.0,5,0.25,0.2,0.2,0.1,0.1,['ruins','weald','warrens','cove'],1))
+monsters[1].skills.append(skill('Web','ranged',[1,2,3,4],[1,2,3,4],lambda: random.radint(1),0,0.825,0.06,None))
+monsters[1].skills.append(skill('Bite','melee',[1,2,3,4],[1,2,3,4],lambda: random.radint(1,3),0,0.725,0.02,None))
 monsters.append(monster('Spitter','beast',7,15.0,0.0,4,0.25,0.2,0.2,0.1,0.1,['ruins','weald','warrens','cove'],1))
+monsters[2].skills.append(skill('Spit','ranged',[3,4],[1,2,3,4],lambda: random.radint(3,5),0,0.825,0.12,None))
+monsters[2].skills.append(skill('Bite','melee',[1,2,3,4],[1,2,3,4],lambda: random.radint(1,3),0,0.725,0.02,None))
 monsters.append(monster('Maggot','beast',6,0.0,0.0,3,1.0,0.4,0.4,0.6,0.0,['ruins','weald','warrens','cove'],1))
+monsters[3].skills.append(skill('Grave Nibble','melee',[1,2,3,4],[1,2,3,4],lambda: random.radint(2,4),0,0.625,0.12,None))
 monsters.append(monster('Madman','human',14,20.0,0.0,9,0.1,0.1,0.1,0.15,0.1,['ruins','weald','warrens','cove'],1))
+monsters[4].skills.append(skill('Doomsay','ranged',[1,2,3,4],[19],lambda: 0,0,1.025,0,None))
+monsters[4].skills.append(skill('Accusation','ranged',[1,2,3,4],[1,2,3,4],lambda: random.radint(1),0,1.025,0,None))
 monsters.append(monster('Brigand_Cutthroat','human',12,2.5,0.15,3,0.25,0.2,0.2,0.15,0.25,['ruins','weald','warrens','cove'],1))
+monsters[5].skills.append(skill('Slice and Dice','melee',[1,2,3],[13],lambda: random.radint(3,5),0,0.725,0.12,None))
+monsters[5].skills.append(skill('Uppercut Slice','melee',[1,2],[1,2,3],lambda: random.radint(2,4),0,0.725,0.06,None))
+monsters[5].skills.append(skill('Shank','melee',[1,2,3],[1,2,3,4],lambda: random.radint(4,8),0,0.725,0.06,None))
+monsters[5].skills.append(skill('Harmless Poke','melee',[4],[1,2,3,4],lambda: random.radint(2,4),0,0.425,0,None))
 monsters.append(monster('Brigand_Fusilier','human',12,7.5,0.0,6,0.25,0.2,0.2,0.15,0.25,['ruins','weald','warrens','cove'],1))
+monsters[6].skills.append(skill('Blanket Fire','ranged',[2,3,4],[19],lambda: random.randint(1,3),0,0.725,0,None))
+monsters[6].skills.append(skill('Accusation','melee',[1],[1,2,3],lambda: random.radint(2,4),0,0.625,0.06,None))
 monsters.append(monster('Brigand_Bloodletter','human',35,0.0,0.0,1,0.5,0.2,0.2,0.15,0.75,['ruins','weald','warrens','cove'],2))
-monsters.append(monster('Sycophant','bloodsucker',12,10.0,0.0,10,0.15,0.8,0.15,0.4,0.05,['ruins','weald','warrens','cove'],1))
+monsters[7].skills.append(skill('Raind of Whips','melee',[1,2],[19],lambda: random.randint(1),0,0.825,0,None))
+monsters[7].skills.append(skill('Punishment','melee',[1,2,3,4],[1,2,3,4],lambda: random.radint(2,4),0,0.825,0.12,None))
+monsters[7].skills.append(skill('Point Blank Shot','ranged',[1],[1],lambda: random.radint(5,11),0,0.825,0.16,None))
 monsters.append(monster('Supplicant','bloodsucker',12,0.0,0.20,1,1.5,0.5,0.15,0.4,0.25,['ruins','weald','warrens','cove'],1))
-#monsters.append(monster('Ghoul',8,0,0,1,0.1,0.1,2.0,0.15,0.1,['ruins','weald','warrens','cove'],2))
+monsters[8].skills.append(skill('Gather the Blood','melee',[1,2],[1,2,3,4],lambda: random.randint(2,5),0,0.775,0,None))
+monsters[8].skills.append(skill('Predigestion','melee',[1,2,3,4],[1,2,3,4],lambda: random.randint(1,5),0,0.775,0.04,None))
 monsters.append(monster('Cultist_Brawler','human',15,0.0,0.0,5,0.25,0.2,0.2,0.15,0.25,['ruins','weald','warrens','cove'],1))
+monsters[9].skills.append(skill('Rend for the Old Gods','melee',[1,2],[1,2],lambda: random.randint(2,4),0,0.725,0.12,None))
+monsters[9].skills.append(skill('Stumbling Scratch','melee',[3,4],[1,2],lambda: random.randint(2,4),0,0.425,0,None))
 monsters.append(monster('Cultist_Acolyte','human',13,12.5,0.0,7,0.25,0.2,0.2,0.4,0.1,['ruins','weald','warrens','cove'],1))
-#monsters.append(monster('Gargoyle',8,0,0,1,0.1,0.1,2.0,0.15,0.1,['ruins','weald','warrens','cove'],1))
-monsters.append(monster('Castellan','bloodsucker',12,21.0,0.0,5,0.5,0.6,0.25,0.5,0.5,['ruins','weald','warrens','cove'],1))
-#monsters.append(monster('Chevalier',8,0,0,1,0.1,0.1,2.0,0.15,0.1,['ruins','weald','warrens','cove'],1))
+monsters[10].skills.append(skill('Stressful Incantation','ranged',[1,2,3,4],[1,2,3,4],lambda: random.randint(1),0,0.825,0,None))
+monsters[10].skills.append(skill('Eldritch Pull','ranged',[2,3,4],[3,4],lambda: random.randint(1),0,0.825,0.06,None))
+monsters[10].skills.append(skill('Eldritch Push','ranged',[1,2,3,4],[1,2],lambda: random.randint(1),0,0.825,0.06,None))
+monsters.append(monster('Gatekeeper','bloodsucker',12,21.0,0.0,5,0.5,0.6,0.25,0.5,0.5,['ruins','weald','warrens','cove'],1))
+monsters[11].skills.append(skill('Enraging Slight','ranged',[1,2,3,4],[1,2,3,4],lambda: random.randint(1,3),0,0.825,0.02,None))
+monsters[11].skills.append(skill('Ellusive Exit','ranged',[1,2,3,4],[19],lambda: random.randint(2),0,1.2,0,None))
 monsters.append(monster('Rattler','beast',24,7.5,0.25,9,0.25,0.4,0.2,0.2,0.5,['ruins','weald','warrens','cove'],1))
+monsters[12].skills.append(skill('Warning Rattle','support',[1,2,3,4],[1,2,3,4],lambda: 0,0,1,0,None))
+monsters[12].skills.append(skill('Snakebite','ranged',[1,2,3],[1,2,3],lambda: random.randint(3,7),0,0.925,0.02,None))
+monsters[12].skills.append(skill('Slither Forward','ranged',[4],[1,2],lambda: random.randint(1,3),0,0.775,0,None))
+monsters[12].skills.append(skill('Riposte','melee',[1,2,3,4],[1,2,3,4],lambda: random.randint(1,4),0,0.825,0,None))
 monsters.append(monster('Pliskin','beast',12,12.0,0.1,6,0.25,0.8,0.1,0.2,0.25,['ruins','weald','warrens','cove'],1))
+monsters[13].skills.append(skill('Venomous Gleek','ranged',[3,4],[1,2,3,4],lambda: random.randint(1),0,0.925,0.02,None))
+monsters[13].skills.append(skill('Infuse','melee',[1,2],[1,2],lambda: random.randint(3,5),0,0.925,0.06,None))
 monsters.append(monster('Big_Adder','beast',45,5.0,0.2,4,0.5,0.75,0.2,0.4,0.8,['ruins','weald','warrens','cove'],2))
+monsters[14].skills.append(skill("Adder's Fang",'ranged',[1,2,3,4],[1,2,3,4],lambda: random.randint(2,4),0,0.925,0.02,None))
+monsters[14].skills.append(skill('Paralyzing Quills','melee',[1,2,3],[1,2,3],lambda: random.randint(5,9),0,0.975,0.02,None))
+monsters[14].skills.append(skill('Molt','support',[2,3],[2,3],lambda: -8,0,1,0,None))
+#monsters.append(monster('Sycophant','bloodsucker',12,10.0,0.0,10,0.15,0.8,0.15,0.4,0.05,['ruins','weald','warrens','cove'],1))
+#monsters.append(monster('Ghoul',8,0,0,1,0.1,0.1,2.0,0.15,0.1,['ruins','weald','warrens','cove'],2))
+#monsters.append(monster('Gargoyle',8,0,0,1,0.1,0.1,2.0,0.15,0.1,['ruins','weald','warrens','cove'],1))
+#monsters.append(monster('Chevalier',8,0,0,1,0.1,0.1,2.0,0.15,0.1,['ruins','weald','warrens','cove'],1))
 quirks.append(quirk('beast_hater','positive',['+0.15 dmg','-0.15 beast_stress']))
 classes.append(class_char('vestal',24,0,0,4,0,0.01,0.3,0.3,0.3,0.3,0.4,0.3,0.1,0.67))
 classes.append(class_char('shieldbreaker',20,8,0,5,0,0.06,0.5,0.2,0.3,0.5,0.3,0.3,0.2,0.67))
@@ -169,7 +207,7 @@ f = object()
 @client.command()
 async def help(ctx,option=None):
     if(option=='fight'):
-        embed = discord.Embed(title='fight',description='Darkest Dungeon Combat Simulator version: alpha 0.0.1',colour = discord.Colour.green())
+        embed = discord.Embed(title='fight',description='Darkest Dungeon Combat Simulator version: alpha 0.0.2',colour = discord.Colour.green())
         embed.add_field(name='fight *location*',value='starts a new fight in *location*',inline=True)
         embed.add_field(name='retreat',value='retreats from the fight',inline=True)
         embed.add_field(name='show',value='shows the composition of characters and enemies',inline=True)
@@ -234,6 +272,20 @@ async def start(ctx):
         for i in f.chars:
             order.append([i,random.randint(0,8)+i[1].spd])
         order = quicksort(order,0,len(order)-1)
+        for i in range(len(order)):
+            if order[i][0] in f.cmonsters:
+                pos = 1
+                for j in range(0,i):
+                    if order[j][0] in f.cmonsters:
+                        pos += order[j][0].size
+                available = []
+                for j in order[i][0].skills:
+                    if pos in j.ranks:
+                        available.append(j)
+            else:
+                await asyncio.sleep(1)
+        await ctx.channel.send('next turn')
+        await asyncio.sleep(3)
         #for i in range(len(order)):
         #    print(order[i][1])
         #print('------------------')
