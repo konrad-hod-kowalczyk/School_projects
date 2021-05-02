@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+	<div class="road">
+	<div id="ver"></div>
+	<div id="lsv"></div>
+	<div id="rsv"></div>
+	<div id="hor"></div>
+	<div id="lsh"></div>
+	<div id="rsh"></div>
+	<div id="turn"></div>
+	<div id="ls"></div>
+	<div id="rs"></div>
+	</div>
+	<style>
+	.road{
+		width: 150px;
+		height: 150px;
+		position: relative;
+		transform: scaleY(-1) rotateY(180deg);
+	}
+	.road #turn { 
+		width: 25px;
+		height: 25px;
+		left: 25px;
+		top:25px;
+		background-color: transparent;
+		border: 100px solid transparent;
+		border-left:  100px solid grey;
+		border-radius: 50%;
+		transform: rotate(45deg);
+		position: absolute;
+	}
+	/*left strip*/
+	.road #ls { 
+		width: 225px;
+		height: 225px;
+		top: 20px;
+		left: 20px;
+		background-color: transparent;
+		border: 5px solid transparent;
+		border-left:  5px solid #ffdd00;
+		transform: rotate(45deg);
+		border-radius: 50%;
+		position: absolute;
+	}
+	/*right strip*/
+	.road #rs { 
+		width: 15px;
+		height: 15px;
+		left: 125px;
+		top:125px;
+		background-color: transparent;
+		border: 5px solid transparent;
+		border-left:  5px solid #ffdd00;
+		transform: rotate(45deg);
+		border-radius: 50%;
+		position: absolute;
+	}
+	/*vertical*/
+	.road #ver{
+	width:100px;
+	height:25px;
+	left:25px;
+	background-color:grey;
+	top:130px;
+	position:absolute;
+	}
+	/*left strip verical*/
+	.road #lsv{
+	width:5px;
+	height:25px;
+	left:20px;
+	background-color:#ffdd00;
+	top:130px;
+	position:absolute;
+	}
+	/*right strip verical*/
+	.road #rsv{
+	width:5px;
+	height:25px;
+	right:20px;
+	background-color:#ffdd00;
+	top:130px;
+	position:absolute;
+	}
+	/*horizontal*/
+	.road #hor{
+	width:25px;
+	height:100px;
+	left:130px;
+	background-color:grey;
+	top:25px;
+	position:absolute;
+	}
+	/*left strip horizontal*/
+	.road #lsh{
+	width:25px;
+	height:5px;
+	left:130px;
+	background-color:#ffdd00;
+	top:20px;
+	position:absolute;
+	}
+	/*right strip horizontal*/
+	.road #rsh{
+	width:25px;
+	height:5px;
+	left:130px;
+	background-color:#ffdd00;
+	top:125px;
+	position:absolute;
+	}
+	</style>
+</body>
