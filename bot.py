@@ -275,13 +275,16 @@ async def start(ctx):
         for i in range(len(order)):
             if order[i][0] in f.cmonsters:
                 pos = 1
-                for j in range(0,i):
-                    if order[j][0] in f.cmonsters:
-                        pos += order[j][0].size
+                idx = f.cmonsters.index(order[i][0])
+                for j in range(0,idx):
+                    pos+=f.cmonsters[j].size
                 available = []
                 for j in order[i][0].skills:
                     if pos in j.ranks:
                         available.append(j)
+                used_skill = random.choice(available)
+                rank = random.choice(used_skill.target)
+                await ctx.channel.send(f'{order[i][0].name} uses {used_skill.name} against {f.chars[rank-1][1].name}')
             else:
                 await asyncio.sleep(1)
         await ctx.channel.send('next turn')
