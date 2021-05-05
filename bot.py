@@ -54,8 +54,15 @@ class fight_class():
         elif(choice.lower()=='cove'):
             self.back='cove'
         else:
-            print('shit')
-            delete()
+            choice = random.randint(1,4)
+            if(choice==1):
+                self.back='ruins'
+            elif(choice==2):
+                self.back='weald'
+            elif(choice==3):
+                self.back='warrens'
+            elif(choice==4):
+                self.back='cove'
         self.cmonsters = [];
         while(len(self.cmonsters)!=4):
             self.cmonsters.append(deepcopy(monsters[random.randint(0,len(monsters)-1)]))
@@ -189,6 +196,13 @@ classes.append(class_char('vestal',24,0,0,4,0,0.01,0.3,0.3,0.3,0.3,0.4,0.3,0.1,0
 classes.append(class_char('shieldbreaker',20,8,0,5,0,0.06,0.5,0.2,0.3,0.5,0.3,0.3,0.2,0.67))
 classes.append(class_char('abomination',26,7.5,0,7,0,0.02,0.4,0.6,0.2,0.4,0.3,0.2,0.1,0.67))
 classes.append(class_char('antiquarian',17,10,0,5,0,0.01,0.2,0.2,0.2,0.2,0.2,0.2,0.1,0.67))
+classes[3].skills.append(skill('Nervous Stab','melee',[1,2,3,4],[1,2,3],lambda: random.randint(3,5),0,0.85,0.03,None))
+classes[3].skills.append(skill('Festering Vapours','ranged',[1,2,3,4],[1,2,3],lambda: random.randint(3,5),-0.75,0.95,0,None))
+classes[3].skills.append(skill('Get Down!','support',[1,2,3,4],[1,2,3,4],lambda: 0,0,1.0,0,None))
+classes[3].skills.append(skill('Flashpowder','ranged',[1,2,3,4],[1,2,3,4],lambda: random.randint(3,5),-1.0,0.95,0,None))
+classes[3].skills.append(skill('Fortyfying Vapours','support',[3,4],[19],lambda: -1,0,1.0,0,None))
+classes[3].skills.append(skill('Invigorating Vapours','support',[3,4],[1,2,3,4],lambda: 0,0,1.0,0,None))
+classes[3].skills.append(skill('Protect Me','support',[1,2,3,4],[1,2,3,4],lambda: 0,0,1.0,0,None))
 classes.append(class_char('arbalest',27,0,0,3,0,0.06,0.4,0.3,0.3,0.4,0.3,0.3,0.1,0.67))
 classes.append(class_char('bounty_hunter',25,5,0,5,0,0.04,0.4,0.3,0.2,0.4,0.3,0.3,0.4,0.67))
 classes.append(class_char('crusader',33,5,0,1,0,0.03,0.4,0.3,0.3,0.4,0.3,0.3,0.1,0.67))
@@ -208,7 +222,7 @@ f = object()
 @client.command()
 async def help(ctx,option=None):
     if(option=='fight'):
-        embed = discord.Embed(title='fight',description='Darkest Dungeon Combat Simulator version: alpha 0.0.4',colour = discord.Colour.green())
+        embed = discord.Embed(title='fight',description='Darkest Dungeon Combat Simulator version: alpha 0.0.5',colour = discord.Colour.green())
         embed.add_field(name='fight *location*',value='starts a new fight in *location*',inline=True)
         embed.add_field(name='retreat',value='retreats from the fight',inline=True)
         embed.add_field(name='show',value='shows the composition of characters and enemies',inline=True)
@@ -229,7 +243,7 @@ async def help(ctx,option=None):
         embed.add_field(name='whispers', value='```to see more type .help whispers```',inline=True)
         await ctx.channel.send(embed=embed)
 @client.command()
-async def fight(ctx, loc):
+async def fight(ctx, loc='None'):
     delete()
     global f
     f = fight_class(loc)
@@ -281,14 +295,17 @@ async def start(ctx):
                     pos+=f.cmonsters[j].size
                 available = []
                 for j in order[i][0].skills:
-                    if pos in j.ranks:
+                    if pos in j.ranks and not any([[k for k in j.target] == [l for l in range(len(f.chars))]]):
                         available.append(j)
+                if not available:
+                    await ctx.channel.send(f'{order[i][0].name} passes')
+                    continue
                 used_skill = random.choice(available)
                 rank = random.choice(used_skill.target)
                 if rank>10:
                     inc=1
                     while(rank>10 or inc+1<len(f.chars)):
-                        damage = used_skill.dmg()
+                        damage = int(used_skill.dmg()*(1-f.chars[inc-1][1].prot))
                         await ctx.channel.send(f'{order[i][0].name} uses {used_skill.name} against {f.chars[inc-1][2]} the {f.chars[inc-1][1].name}')
                         if random.random()>used_skill.acc:
                             rank-=inc
@@ -297,13 +314,16 @@ async def start(ctx):
                             continue
                         if random.random() < used_skill.crit_mod:
                             damage = damage*2
-                            f.chars[inc-1][1].stress+=random.randint(5,10)
+                            for i in f.chars:
+                                i[1].stress+=random.randint(2,6)
                             await ctx.channel.send('CRIT')
-                            await ctx.channel.send(f'causing {damage} dmg')
+                        await ctx.channel.send(f'causing {damage} dmg')
                         if f.chars[inc-1][1].hp<=0:
                             f.chars[inc-1][1].hp=0
                             if random.random()>f.chars[inc-1][1].death_blow:
                                 f.chars.pop(inc-1)
+                                for i in f.chars:
+                                    i[1].stress+=random.randint(10,20)
                                 await ctx.channel.send('DEATHBLOW')
                             else:
                                 await ctx.channel.send("Death's Door")
@@ -312,20 +332,23 @@ async def start(ctx):
                         rank-=inc
                         inc+=1
                 else:
-                    damage = used_skill.dmg()
+                    damage = int(used_skill.dmg()*(1-f.chars[rank-1][1].prot))
                     await ctx.channel.send(f'{order[i][0].name} uses {used_skill.name} against {f.chars[rank-1][2]} the {f.chars[rank-1][1].name}')
                     if random.random()>used_skill.acc:
                         await ctx.channel.send('MISS')
                         continue
                     if random.random() < used_skill.crit_mod:
                         damage = damage*2
-                        f.chars[rank-1][1].stress+=random.randint(5,10)
+                        for i in f.chars:
+                            i[1].stress+=random.randint(2,6)
                         await ctx.channel.send('CRIT')
                     await ctx.channel.send(f'causing {damage} dmg')
                     if f.chars[rank-1][1].hp<=0:
                         f.chars[rank-1][1].hp=0
                         if random.random()>f.chars[rank-1][1].death_blow:
                             f.chars.pop(rank-1)
+                            for i in f.chars:
+                                i[1].stress+=random.randint(10,20)
                             await ctx.channel.send('DEATHBLOW')
                         else:
                             await ctx.channel.send("Death's Door")
@@ -336,6 +359,7 @@ async def start(ctx):
             else:
                 user = discord.utils.get(ctx.channel.guild.members, id=order[i][0][0])
                 await ctx.channel.send(f"{user.mention} {order[i][0][2]}'s turn")
+                msg = await client.wait_for('message')
                 await asyncio.sleep(2)
         await ctx.channel.send('next turn')
         await asyncio.sleep(3)
