@@ -16,11 +16,11 @@ for i in map:
         if j=='1':
             generated+="\n<div class='road1' style='display: inline-block;'>\n<div id='ver'></div>\n<div id='lsv'></div>\n<div id='rsv'></div>\n<div id='hor'></div>\n<div id='lsh'></div>\n<div id='rsh'></div>\n<div id='turn'></div>\n<div id='ls'></div>\n<div id='rs'></div>\n</div>"
         if j=='2':
-            generated+="\n<div class='road2' style='display: inline-block;'>\n<div id='main'></div>\n<div id='ls'></div>\n<div id='rs'></div>\n</div>"
+            generated+="\n<div class='road2' style='display: inline-block;'>\n<div id='main'></div>\n<div id='lss'></div>\n<div id='rss'></div>\n</div>"
         if j=='3':
             generated+="\n<div class='road3' style='display: inline-block;'>\n<div id='ver'></div>\n<div id='lsv'></div>\n<div id='rsv'></div>\n<div id='hor'></div>\n<div id='lsh'></div>\n<div id='rsh'></div>\n<div id='turn'></div>\n<div id='ls'></div>\n<div id='rs'></div>\n</div>"
         if j=='4':
-            generated+="\n<div class='road4' style='display: inline-block;'>\n<div id='main'></div>\n<div id='ls'></div>\n<div id='rs'></div>\n</div>"
+            generated+="\n<div class='road4' style='display: inline-block;'>\n<div id='main'></div>\n<div id='lss'></div>\n<div id='rss'></div>\n</div>"
         if j=='5':
             generated+="\n<div class='road5' style='display: inline-block;'>\n<div id='ver'></div>\n<div id='lsv'></div>\n<div id='rsv'></div>\n<div id='hor'></div>\n<div id='lsh'></div>\n<div id='rsh'></div>\n<div id='turn'></div>\n<div id='ls'></div>\n<div id='rs'></div>\n</div>"
         if j=='6':

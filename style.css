@@ -1,10 +1,4 @@
-.road1{
-		width: 150px;
-		height: 150px;
-		position: relative;
-		background-color: #55aa55;
-	}
-	.road1 #turn { 
+	#turn { 
 		width: 25px;
 		height: 25px;
 		left: 25px;
@@ -17,7 +11,7 @@
 		position: absolute;
 	}
 	/*left strip*/
-	.road1 #ls { 
+	#ls { 
 		width: 225px;
 		height: 225px;
 		top: 20px;
@@ -30,7 +24,7 @@
 		position: absolute;
 	}
 	/*right strip*/
-	.road1 #rs { 
+	#rs { 
 		width: 15px;
 		height: 15px;
 		left: 125px;
@@ -43,58 +37,87 @@
 		position: absolute;
 	}
 	/*vertical*/
-	.road1 #ver{
-	width:100px;
-	height:25px;
-	left:25px;
-	background-color:grey;
-	bottom:0px;
-	position:absolute;
+	#ver{
+		width:100px;
+		height:25px;
+		left:25px;
+		background-color:grey;
+		bottom:0px;
+		position:absolute;
 	}
 	/*left strip vertical*/
-	.road1 #lsv{
-	width:5px;
-	height:25px;
-	left:20px;
-	background-color:#ffdd00;
-	bottom:0px;
-	position:absolute;
+	#lsv{
+		width:5px;
+		height:25px;
+		left:20px;
+		background-color:#ffdd00;
+		bottom:0px;
+		position:absolute;
 	}
 	/*right strip vertical*/
-	.road1 #rsv{
-	width:5px;
-	height:25px;
-	right:20px;
-	background-color:#ffdd00;
-	bottom:0px;
-	position:absolute;
+	#rsv{
+		width:5px;
+		height:25px;
+		right:20px;
+		background-color:#ffdd00;
+		bottom:0px;
+		position:absolute;
 	}
 	/*horizontal*/
-	.road1 #hor{
-	width:25px;
-	height:100px;
-	right:0px;
-	background-color:grey;
-	top:25px;
-	position:absolute;
+	#hor{
+		width:25px;
+		height:100px;
+		right:0px;
+		background-color:grey;
+		top:25px;
+		position:absolute;
 	}
 	/*left strip horizontal*/
-	.road1 #lsh{
-	width:25px;
-	height:5px;
-	right:0px;
-	background-color:#ffdd00;
-	top:20px;
-	position:absolute;
+	#lsh{
+		width:25px;
+		height:5px;
+		right:0px;
+		background-color:#ffdd00;
+		top:20px;
+		position:absolute;
 	}
 	/*right strip horizontal*/
-	.road1 #rsh{
-	width:25px;
-	height:5px;
-	right:0px;
-	background-color:#ffdd00;
-	top:125px;
-	position:absolute;
+	#rsh{
+		width:25px;
+		height:5px;
+		right:0px;
+		background-color:#ffdd00;
+		top:125px;
+		position:absolute;
+	}
+	#main {
+	   left: 25px;
+	   width: 100px;
+	   height: 150px;
+	   background-color: grey;
+	   position: absolute;
+	  }
+	/*left strip for straight road*/
+	#lss {
+	   left: 20px;
+	   width: 5px;
+	   height: 150px;
+	   background-color: #ffdd00;
+	   position: absolute;
+	  }
+	/*right strip for straight road*/
+	#rss {
+	   right: 20px;
+	   width: 5px;
+	   height: 150px;
+	   background-color: #ffdd00;
+	   position: absolute;
+	  }
+	.road1{
+		width: 150px;
+		height: 150px;
+		position: relative;
+		background-color: #55aa55;
 	}
 	.road2 {
 		width: 150px;
@@ -102,157 +125,19 @@
 		position: relative;
 		transform: rotate(90deg);
 		background-color: #55aa55;
-	  }
-	  .road2 #main {
-	   left: 25px;
-	   width: 100px;
-	   height: 150px;
-	   background-color: grey;
-	   position: absolute;
-	  }
-	  /*left strip*/
-	  .road2 #ls {
-	   left: 20px;
-	   width: 5px;
-	   height: 150px;
-	   background-color: #ffdd00;
-	   position: absolute;
-	  }
-	  /*right strip*/
-	  .road2 #rs {
-	   right: 20px;
-	   width: 5px;
-	   height: 150px;
-	   background-color: #ffdd00;
-	   position: absolute;
-	  }
-	  .road3{
+	}
+	.road3{
 		width: 150px;
 		height: 150px;
 		position: relative;
 		transform: scaleX(-1);
 		background-color: #55aa55;
 	}
-	.road3 #turn { 
-		width: 25px;
-		height: 25px;
-		left: 25px;
-		top:25px;
-		background-color: transparent;
-		border: 100px solid transparent;
-		border-left:  100px solid grey;
-		border-radius: 50%;
-		transform: rotate(45deg);
-		position: absolute;
-	}
-	/*left strip*/
-	.road3 #ls { 
-		width: 225px;
-		height: 225px;
-		top: 20px;
-		left: 20px;
-		background-color: transparent;
-		border: 5px solid transparent;
-		border-left:  5px solid #ffdd00;
-		transform: rotate(45deg);
-		border-radius: 50%;
-		position: absolute;
-	}
-	/*right strip*/
-	.road3 #rs { 
-		width: 15px;
-		height: 15px;
-		left: 125px;
-		top:125px;
-		background-color: transparent;
-		border: 5px solid transparent;
-		border-left:  5px solid #ffdd00;
-		transform: rotate(45deg);
-		border-radius: 50%;
-		position: absolute;
-	}
-	/*vertical*/
-	.road3 #ver{
-	width:100px;
-	height:25px;
-	left:25px;
-	background-color:grey;
-	bottom:0px;
-	position:absolute;
-	}
-	/*left strip vertical*/
-	.road3 #lsv{
-	width:5px;
-	height:25px;
-	left:20px;
-	background-color:#ffdd00;
-	bottom:0px;
-	position:absolute;
-	}
-	/*right strip vertical*/
-	.road3 #rsv{
-	width:5px;
-	height:25px;
-	right:20px;
-	background-color:#ffdd00;
-	bottom:0px;
-	position:absolute;
-	}
-	/*horizontal*/
-	.road3 #hor{
-	width:25px;
-	height:100px;
-	right:0px;
-	background-color:grey;
-	top:25px;
-	position:absolute;
-	}
-	/*left strip horizontal*/
-	.road3 #lsh{
-	width:25px;
-	height:5px;
-	right:0px;
-	background-color:#ffdd00;
-	top:20px;
-	position:absolute;
-	}
-	/*right strip horizontal*/
-	.road3 #rsh{
-	width:25px;
-	height:5px;
-	right:0px;
-	background-color:#ffdd00;
-	top:125px;
-	position:absolute;
-	}
 	.road4 {
 		width: 150px;
 		height: 150px;
 		position: relative;
 		background-color: #55aa55;
-	  }
-	  .road4 #main {
-	   left: 25px;
-	   width: 100px;
-	   height: 150px;
-	   background-color: grey;
-	   position: absolute;
-	  }
-	  /*left strip*/
-	  .road4 #ls {
-	   left: 20px;
-	   width: 5px;
-	   height: 150px;
-	   background-color: #ffdd00;
-	   position: absolute;
-	  }
-	  /*right strip*/
-	  .road4 #rs {
-	   right: 20px;
-	   width: 5px;
-	   height: 150px;
-	   background-color: #ffdd00;
-	   position: absolute;
 	  }
 	.road5{
 		width: 150px;
@@ -261,196 +146,12 @@
 		transform: scaleY(-1) rotateY(180deg);
 		background-color: #55aa55;
 	}
-	.road5 #turn { 
-		width: 25px;
-		height: 25px;
-		left: 25px;
-		top:25px;
-		background-color: transparent;
-		border: 100px solid transparent;
-		border-left:  100px solid grey;
-		border-radius: 50%;
-		transform: rotate(45deg);
-		position: absolute;
-	}
-	/*left strip*/
-	.road5 #ls { 
-		width: 225px;
-		height: 225px;
-		top: 20px;
-		left: 20px;
-		background-color: transparent;
-		border: 5px solid transparent;
-		border-left:  5px solid #ffdd00;
-		transform: rotate(45deg);
-		border-radius: 50%;
-		position: absolute;
-	}
-	/*right strip*/
-	.road5 #rs { 
-		width: 15px;
-		height: 15px;
-		left: 125px;
-		top:125px;
-		background-color: transparent;
-		border: 5px solid transparent;
-		border-left:  5px solid #ffdd00;
-		transform: rotate(45deg);
-		border-radius: 50%;
-		position: absolute;
-	}
-	/*vertical*/
-	.road5 #ver{
-	width:100px;
-	height:25px;
-	left:25px;
-	background-color:grey;
-	bottom:0px;
-	position:absolute;
-	}
-	/*left strip vertical*/
-	.road5 #lsv{
-	width:5px;
-	height:25px;
-	left:20px;
-	background-color:#ffdd00;
-	bottom:0px;
-	position:absolute;
-	}
-	/*right strip vertical*/
-	.road5 #rsv{
-	width:5px;
-	height:25px;
-	right:20px;
-	background-color:#ffdd00;
-	bottom:0px;
-	position:absolute;
-	}
-	/*horizontal*/
-	.road5 #hor{
-	width:25px;
-	height:100px;
-	right:0px;
-	background-color:grey;
-	top:25px;
-	position:absolute;
-	}
-	/*left strip horizontal*/
-	.road5 #lsh{
-	width:25px;
-	height:5px;
-	right:0px;
-	background-color:#ffdd00;
-	top:20px;
-	position:absolute;
-	}
-	/*right strip horizontal*/
-	.road5 #rsh{
-	width:25px;
-	height:5px;
-	right:0px;
-	background-color:#ffdd00;
-	top:125px;
-	position:absolute;
-	}
 	.road6{
 		width: 150px;
 		height: 150px;
 		position: relative;
 		background-color: #55aa55;
 		transform: scaleY(-1);
-	}
-	.road6 #turn { 
-		width: 25px;
-		height: 25px;
-		left: 25px;
-		top:25px;
-		background-color: transparent;
-		border: 100px solid transparent;
-		border-left:  100px solid grey;
-		border-radius: 50%;
-		transform: rotate(45deg);
-		position: absolute;
-	}
-	/*left strip*/
-	.road6 #ls { 
-		width: 225px;
-		height: 225px;
-		top: 20px;
-		left: 20px;
-		background-color: transparent;
-		border: 5px solid transparent;
-		border-left:  5px solid #ffdd00;
-		transform: rotate(45deg);
-		border-radius: 50%;
-		position: absolute;
-	}
-	/*right strip*/
-	.road6 #rs { 
-		width: 15px;
-		height: 15px;
-		left: 125px;
-		top:125px;
-		background-color: transparent;
-		border: 5px solid transparent;
-		border-left:  5px solid #ffdd00;
-		transform: rotate(45deg);
-		border-radius: 50%;
-		position: absolute;
-	}
-	/*vertical*/
-	.road6 #ver{
-	width:100px;
-	height:25px;
-	left:25px;
-	background-color:grey;
-	bottom:0px;
-	position:absolute;
-	}
-	/*left strip vertical*/
-	.road6 #lsv{
-	width:5px;
-	height:25px;
-	left:20px;
-	background-color:#ffdd00;
-	bottom:0px;
-	position:absolute;
-	}
-	/*right strip vertical*/
-	.road6 #rsv{
-	width:5px;
-	height:25px;
-	right:20px;
-	background-color:#ffdd00;
-	bottom:0px;
-	position:absolute;
-	}
-	/*horizontal*/
-	.road6 #hor{
-	width:25px;
-	height:100px;
-	right:0px;
-	background-color:grey;
-	top:25px;
-	position:absolute;
-	}
-	/*left strip horizontal*/
-	.road6 #lsh{
-	width:25px;
-	height:5px;
-	right:0px;
-	background-color:#ffdd00;
-	top:20px;
-	position:absolute;
-	}
-	/*right strip horizontal*/
-	.road6 #rsh{
-	width:25px;
-	height:5px;
-	right:0px;
-	background-color:#ffdd00;
-	top:125px;
-	position:absolute;
 	}
 	.ground {
 		width: 150px;
