@@ -335,25 +335,80 @@ async def start(ctx):
                     pos+=f.cmonsters[j].size
                 available = []
                 for j in order[i][0].skills:
-                    if pos in j.ranks and not any([[k for k in j.target] == [l for l in range(len(f.chars))]]):
+                    if pos in j.ranks and j.type != 'support' and not any([[k for k in j.target] == [l for l in range(len(f.chars))]]):
+                        available.append(j)
+                    if pos in j.ranks and j.type == 'support' and not any([[k for k in j.target] == [l for l in range(sum(d.size for d in f.cmonsters))]]):
                         available.append(j)
                 if not available:
                     await ctx.channel.send(f'{order[i][0].name} passes')
                     continue
+                for s in available:
+                    print(s.name)
                 used_skill = random.choice(available)
                 rank = random.choice(used_skill.target)
-                if rank>10:
-                    inc=1
-                    if rank==15 or rank==18:
-                        inc=2
-                    if rank==17:
-                        inc=3
-                    while(rank>10 or inc+1<len(f.chars)):
-                        damage = int(used_skill.dmg()*(1-f.chars[inc-1][1].prot))
-                        await ctx.channel.send(f'{order[i][0].name} uses {used_skill.name} against {f.chars[inc-1][2]} the {f.chars[inc-1][1].name}')
-                        if random.random()>used_skill.acc:
+                if used_skill.type=='support':
+                    if rank>10:
+                        inc=1
+                        if rank==15 or rank==18:
+                            inc=2
+                        if rank==17:
+                            inc=3
+                        while(rank>10 or inc+1<len(f.cmonsters)):
+                            heal = used_skill.dmg()
+                            await ctx.channel.send(f'{order[i][0].name} uses {used_skill.name} against {f.cmonsters[inc-1].name}')
+                            if random.random() < used_skill.crit_mod:
+                                heal = heal*2
+                                await ctx.channel.send('CRIT')
+                            await ctx.channel.send(f'healing {heal} dmg')
+                            f.cmonsters[inc-1].hp-=heal
                             rank-=inc
                             inc+=1
+                    else:
+                        heal = used_skill.dmg()
+                        await ctx.channel.send(f'{order[i][0].name} uses {used_skill.name} against {f.chars[rank-1].name}')
+                        if random.random() < used_skill.crit_mod:
+                            heal = heal*2
+                            await ctx.channel.send('CRIT')
+                        await ctx.channel.send(f'healing {heal} dmg')
+                        f.cmonsters[inc-1].hp-=heal
+                else:
+                    if rank>10:
+                        inc=1
+                        if rank==15 or rank==18:
+                            inc=2
+                        if rank==17:
+                            inc=3
+                        while(rank>10 or inc+1<len(f.chars)):
+                            damage = int(used_skill.dmg()*(1-f.chars[inc-1][1].prot))
+                            await ctx.channel.send(f'{order[i][0].name} uses {used_skill.name} against {f.chars[inc-1][2]} the {f.chars[inc-1][1].name}')
+                            if random.random()>used_skill.acc:
+                                rank-=inc
+                                inc+=1
+                                await ctx.channel.send('MISS')
+                                continue
+                            if random.random() < used_skill.crit_mod:
+                                damage = damage*2
+                                for i in f.chars:
+                                    i[1].stress+=random.randint(2,6)
+                                await ctx.channel.send('CRIT')
+                            await ctx.channel.send(f'causing {damage} dmg')
+                            if f.chars[inc-1][1].hp<=0:
+                                f.chars[inc-1][1].hp=0
+                                if random.random()>f.chars[inc-1][1].death_blow:
+                                    f.chars.pop(inc-1)
+                                    for i in f.chars:
+                                        i[1].stress+=random.randint(10,20)
+                                    await ctx.channel.send('DEATHBLOW')
+                                else:
+                                    await ctx.channel.send("Death's Door")
+                            else: 
+                                f.chars[inc-1][1].hp-=damage
+                            rank-=inc
+                            inc+=1
+                    else:
+                        damage = int(used_skill.dmg()*(1-f.chars[rank-1][1].prot))
+                        await ctx.channel.send(f'{order[i][0].name} uses {used_skill.name} against {f.chars[rank-1][2]} the {f.chars[rank-1][1].name}')
+                        if random.random()>used_skill.acc:
                             await ctx.channel.send('MISS')
                             continue
                         if random.random() < used_skill.crit_mod:
@@ -362,42 +417,17 @@ async def start(ctx):
                                 i[1].stress+=random.randint(2,6)
                             await ctx.channel.send('CRIT')
                         await ctx.channel.send(f'causing {damage} dmg')
-                        if f.chars[inc-1][1].hp<=0:
-                            f.chars[inc-1][1].hp=0
-                            if random.random()>f.chars[inc-1][1].death_blow:
-                                f.chars.pop(inc-1)
+                        if f.chars[rank-1][1].hp<=0:
+                            f.chars[rank-1][1].hp=0
+                            if random.random()>f.chars[rank-1][1].death_blow:
+                                f.chars.pop(rank-1)
                                 for i in f.chars:
                                     i[1].stress+=random.randint(10,20)
                                 await ctx.channel.send('DEATHBLOW')
                             else:
                                 await ctx.channel.send("Death's Door")
                         else: 
-                            f.chars[inc-1][1].hp-=damage
-                        rank-=inc
-                        inc+=1
-                else:
-                    damage = int(used_skill.dmg()*(1-f.chars[rank-1][1].prot))
-                    await ctx.channel.send(f'{order[i][0].name} uses {used_skill.name} against {f.chars[rank-1][2]} the {f.chars[rank-1][1].name}')
-                    if random.random()>used_skill.acc:
-                        await ctx.channel.send('MISS')
-                        continue
-                    if random.random() < used_skill.crit_mod:
-                        damage = damage*2
-                        for i in f.chars:
-                            i[1].stress+=random.randint(2,6)
-                        await ctx.channel.send('CRIT')
-                    await ctx.channel.send(f'causing {damage} dmg')
-                    if f.chars[rank-1][1].hp<=0:
-                        f.chars[rank-1][1].hp=0
-                        if random.random()>f.chars[rank-1][1].death_blow:
-                            f.chars.pop(rank-1)
-                            for i in f.chars:
-                                i[1].stress+=random.randint(10,20)
-                            await ctx.channel.send('DEATHBLOW')
-                        else:
-                            await ctx.channel.send("Death's Door")
-                    else: 
-                        f.chars[rank-1][1].hp-=damage
+                            f.chars[rank-1][1].hp-=damage
                 await show(ctx)
                 await asyncio.sleep(2)
             else:
@@ -486,19 +516,19 @@ async def join(ctx,klass,name,quirks_char):
             else:
                 f.chars.append([ctx.author.id,deepcopy(klass),name,final])
                 await show(ctx)
-@client.command(pass_context=True)
-async def whispers(ctx):
-    if(ctx.author.voice):
-        channel = ctx.message.author.voice.channel
-        voice = await channel.connect()
-        await ctx.channel.send("Voice of Il'gynoth is playing...")
-        voice.play(FFmpegPCMAudio('C:\\Users\\zaras\\Desktop\\koło\\PythON\\heart.mp3'))
-        while voice.is_playing():
-            await asyncio.sleep(0.1)
-        await voice.disconnect()
-        await ctx.channel.send("Voice of Il'gynoth has stopped")
-    else:
-        await ctx.channel.send('You are not on the voice channel')
+#@client.command(pass_context=True)
+#async def whispers(ctx):
+#    if(ctx.author.voice):
+#        channel = ctx.message.author.voice.channel
+#        voice = await channel.connect()
+#        await ctx.channel.send("Voice of Il'gynoth is playing...")
+#        voice.play(FFmpegPCMAudio('C:\\Users\\zaras\\Desktop\\koło\\PythON\\heart.mp3'))
+#        while voice.is_playing():
+#           await asyncio.sleep(0.1)
+#        await voice.disconnect()
+#        await ctx.channel.send("Voice of Il'gynoth has stopped")
+#    else:
+#        await ctx.channel.send('You are not on the voice channel')
 @client.command(pass_context=True)
 async def obecnosc(ctx):
     if(ctx.author.voice):
