@@ -191,7 +191,7 @@
 		position: absolute;
 	}
 	/*bottom right strip*/
-	.crossroads #brs { 
+	#brs { 
 		width: 5px;
 		height: 25px;
 		right: 20px;
@@ -200,7 +200,7 @@
 		position: absolute;
 	}
 	/*bottom left strip*/
-	.crossroads #bls { 
+	#bls { 
 		width: 5px;
 		height: 25px;
 		left: 20px;
@@ -232,6 +232,51 @@
 		height: 5px;
 		right: 0px;
 		top: 20px;
+		background-color: #ffdd00;
+		position: absolute;
+	}
+	/*straight*/
+	#s { 
+		width: 150px;
+		height: 100px;
+		left: 0px;
+		top: 25px;
+		background-color: grey;
+		position: absolute;
+	}
+	/*straight top strip*/
+	#sts { 
+		width: 150px;
+		height: 5px;
+		left: 0px;
+		top: 20px;
+		background-color: #ffdd00;
+		position: absolute;
+	}
+	/*bottom straight centre*/
+	#bsc { 
+		width: 100px;
+		height: 25px;
+		left: 25px;
+		bottom: 0px;
+		background-color: grey;
+		position: absolute;
+	}
+	/*bottom straight left strip*/
+	#bsls { 
+		width: 25px;
+		height: 5px;
+		left: 0px;
+		bottom: 20px;
+		background-color: #ffdd00;
+		position: absolute;
+	}
+	/*bottom straight right strip*/
+	#bsrs { 
+		width: 25px;
+		height: 5px;
+		right: 0px;
+		bottom: 20px;
 		background-color: #ffdd00;
 		position: absolute;
 	}
@@ -281,6 +326,33 @@
 		background-color: #55aa55;
 		position: relative;
 	  }
+	.approach1{
+		width: 150px;
+		height: 150px;
+		background-color: #55aa55;
+		position: relative;
+	}
+	.approach2{
+		width: 150px;
+		height: 150px;
+		background-color: #55aa55;
+		position: relative;
+		transform: rotate(90deg);
+	}
+	.approach3{
+		width: 150px;
+		height: 150px;
+		background-color: #55aa55;
+		position: relative;
+		transform: rotate(180deg);
+	}
+	.approach4{
+		width: 150px;
+		height: 150px;
+		background-color: #55aa55;
+		position: relative;
+		transform: rotate(270deg);
+	}
 	body {
 		position: absolute;
 	}
