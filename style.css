@@ -113,6 +113,128 @@
 	   background-color: #ffdd00;
 	   position: absolute;
 	  }
+	.crossroads{
+		width: 150px;
+		height: 150px;
+		background-color: #55aa55;
+		position: relative;
+	}
+	.crossroads #centre { 
+		width: 100px;
+		height: 100px;
+		left: 25px;
+		top:25px;
+		background-color: grey;
+		position: absolute;
+	}
+	/*top centre*/
+	.crossroads #tc { 
+		width: 100px;
+		height: 25px;
+		left: 25px;
+		top: 0px;
+		background-color: grey;
+		position: absolute;
+	}
+	/*top left strip*/
+	.crossroads #tls { 
+		width: 5px;
+		height: 25px;
+		left: 20px;
+		top:0px;
+		background-color: #ffdd00;
+		position: absolute;
+	}
+	/*top right strip*/
+	.crossroads #trs { 
+		width: 5px;
+		height: 25px;
+		right: 20px;
+		top:0px;
+		background-color: #ffdd00;
+		position: absolute;
+	}
+	/*left centre*/
+	.crossroads #lc { 
+		width: 25px;
+		height: 100px;
+		left: 0px;
+		top: 25px;
+		background-color: grey;
+		position: absolute;
+	}
+	/*left right strip*/
+	.crossroads #lrs { 
+		width: 25px;
+		height: 5px;
+		left: 0px;
+		top: 20px;
+		background-color: #ffdd00;
+		position: absolute;
+	}
+	/*left left strip*/
+	.crossroads #lls { 
+		width: 25px;
+		height: 5px;
+		left: 0px;
+		bottom: 20px;
+		background-color: #ffdd00;
+		position: absolute;
+	}
+	/*bottom centre*/
+	.crossroads #bc { 
+		width: 100px;
+		height: 25px;
+		left: 25px;
+		bottom: 0px;
+		background-color: grey;
+		position: absolute;
+	}
+	/*bottom right strip*/
+	.crossroads #brs { 
+		width: 5px;
+		height: 25px;
+		right: 20px;
+		bottom: 0px;
+		background-color: #ffdd00;
+		position: absolute;
+	}
+	/*bottom left strip*/
+	.crossroads #bls { 
+		width: 5px;
+		height: 25px;
+		left: 20px;
+		bottom: 0px;
+		background-color: #ffdd00;
+		position: absolute;
+	}
+	/*right centre*/
+	.crossroads #rc { 
+		width: 25px;
+		height: 100px;
+		right: 0px;
+		top: 25px;
+		background-color: grey;
+		position: absolute;
+	}
+	/*right right strip*/
+	.crossroads #rrs { 
+		width: 25px;
+		height: 5px;
+		right: 0px;
+		bottom: 20px;
+		background-color: #ffdd00;
+		position: absolute;
+	}
+	/*right left strip*/
+	.crossroads #rls { 
+		width: 25px;
+		height: 5px;
+		right: 0px;
+		top: 20px;
+		background-color: #ffdd00;
+		position: absolute;
+	}
 	.road1{
 		width: 150px;
 		height: 150px;
@@ -159,3 +281,6 @@
 		background-color: #55aa55;
 		position: relative;
 	  }
+	body {
+		position: absolute;
+	}
