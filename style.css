@@ -353,6 +353,170 @@
 		position: relative;
 		transform: rotate(270deg);
 	}
+	.car {
+		width: 100px;
+		height: 150px;
+		position: absolute;
+		left: 0px;
+		top: 0px;
+		transform: rotate(180deg) scaleY(0.5) scaleX(0.5);
+	  }
+	  /*body*/
+	  .car #b {
+		width: 100px;
+		height: 150px;
+		background: #dd6b4d;
+		position: absolute;
+		top: 5px;
+		border-radius: 20%;
+		left: 5px;
+	  }
+	  /*left top wheel*/
+	  .car #ltw {
+		width: 20px;
+		height: 30px;
+		background: black;
+		position: absolute;
+		top: 25px;
+		border-radius: 10%
+	  }
+	  /*right top wheel*/
+	  .car #rtw {
+		width: 20px;
+		height: 30px;
+		background: black;
+		position: absolute;
+		top: 25px;
+		left: 90px;
+		border-radius: 10%
+	  }
+	  /*left bottom wheel*/
+	  .car #lbw {
+		width: 20px;
+		height: 30px;
+		background: black;
+		position: absolute;
+		top: 100px;
+		border-radius: 10%
+	  }
+	  /*right bottom wheel*/
+	  .car #rbw {
+		width: 20px;
+		height: 30px;
+		background: black;
+		position: absolute;
+		top: 100px;
+		left: 90px;
+		border-radius: 10%
+	  }
+	  /*car left top light*/
+	  .car #ltl {
+		width: 16px;
+		height: 13px;
+		background-color: yellow;
+		border-top-left-radius: 5px;
+		border-top-right-radius: 5px;
+		border: 2px solid #ECA03D;
+		border-bottom: relative;
+		position: absolute;
+		top: 0%;
+		left: 10px;
+		margin: 0px;
+	  }
+	  /*car right top light*/
+	  .car #rtl {
+		width: 16px;
+		height: 13px;
+		background-color: yellow;
+		border-top-left-radius: 5px;
+		border-top-right-radius: 5px;
+		border: 2px solid #ECA03D;
+		border-bottom: relative;
+		position: absolute;
+		top: 0%;
+		left: 80px;
+		margin: 0px;
+	  }
+	  /*car left bottom light*/
+	  .car #lbl {
+		width: 16px;
+		height: 5px;
+		background-color: #992266;
+		border-top-left-radius: 5px;
+		border-top-right-radius: 5px;
+		border: 2px solid #ECA03D;
+		border-bottom: relative;
+		position: absolute;
+		top: 150px;
+		left: 15px;
+		margin: 0px;
+		transform: rotate(180deg)
+	  }
+	  /*car right bottom light*/
+	  .car #rbl {
+		width: 16px;
+		height: 5px;
+		background-color: #992266;
+		border-top-left-radius: 5px;
+		border-top-right-radius: 5px;
+		border: 2px solid #ECA03D;
+		border-bottom: relative;
+		position: absolute;
+		top: 150px;
+		left: 75px;
+		margin: 0px;
+		transform: rotate(180deg)
+	  }
+	  /*car front glass*/
+	  .car #fg {
+		width: 60px;
+		height: 20px;
+		background-color: #9966aa;
+		transform: perspective(10px) rotateX(10deg);
+		left: 25px;
+		top: 39px;
+		position: absolute;
+	  }
+	  /*back glass*/
+	  .car #bg {
+		width: 70px;
+		height: 10px;
+		background-color: #9966aa;
+		transform: perspective(10px) rotateX(10deg);
+		left: 20px;
+		top: 135px;
+		position: absolute;
+	  }
+	  /*right glass*/
+	  .car #rg {
+		width: 10px;
+		height: 30px;
+		background-color: #9966aa;
+		transform: perspective(40px) rotateY(-45deg);
+		left: 92px;
+		top: 65px;
+		position: absolute;
+	  }
+	  /*left glass*/
+	  .car #lg {
+		width: 10px;
+		height: 30px;
+		background-color: #9966aa;
+		transform: perspective(40px) rotateY(45deg);
+		left: 8px;
+		top: 65px;
+		position: absolute;
+	  }
+	  /*car top*/
+	  .car #ct {
+		width: 80px;
+		height: 75px;
+		background: #cc6b4d;
+		position: absolute;
+		top: 60px;
+		left: 15px;
+		border-radius: 20%;
+	  }
 	body {
 		position: absolute;
 	}
