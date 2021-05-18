@@ -42,6 +42,6 @@ for i in map:
             generated+="\n<div class='approach4' style='display: inline-block;'>\n<div id='s'></div>\n<div id='sts'></div>\n<div id='bsc'></div>\n<div id='bsls'></div>\n<div id='bsrs'></div>\n<div id='bls'></div>\n<div id='brs'></div>\n</div>"
     generated+="\n</div>"
 generated+="<div class='car'>\n<div id='ltw'></div>\n<div id='rtw'></div>\n<div id='lbw'></div>\n<div id='rbw'></div>\n<div id='b'></div>\n<div id='fg'></div>\n<div id='bg'></div>\n<div id='rg'></div>\n<div id='lg'></div>\n<div id='ct'></div>\n<div id='ltl'></div>\n<div id='rtl'></div>\n<div id='lbl'></div>\n<div id='rbl'></div>\n</div>"
-generated+="</body>\n</html>"
+generated+="\n<script src='script.js'> </script>\n</body>\n</html>"
 file2 = open('index.html','w')
 file2.write(generated)
