@@ -64,18 +64,21 @@ class fight_class():
             elif(choice==4):
                 self.back='cove'
         self.cmonsters = [];
+        self.ids=[1,2,3,4,5,6,7,8]
         avail=[]
         for i in monsters:
             if self.back in i.locations:
                 avail.append(deepcopy(i))
         while(len(self.cmonsters)!=4):
             self.cmonsters.append(avail[random.randint(0,len(avail)-1)])
+            self.cmonsters[-1].id=random.choice(self.ids)
+            self.ids.remove(self.cmonsters[-1].id)
             if(sum(c.size for c in self.cmonsters)>4):
                 self.cmonsters.pop(len(self.cmonsters)-1)
                 break
         self.chars = []
         for i in self.cmonsters:
-            print(i.name)
+            print(i.id)
     def __del__(self):
         print('The end')
 class monster:
@@ -205,7 +208,7 @@ classes[0].skills.append(skill('Divine Grace','support',[3,4],[1,2,3,4],lambda: 
 classes[0].skills.append(skill('Divine Comfort','support',[2,3,4],[19],lambda: -random.randint(1,3),0,1.0,0,None,None))
 classes[0].skills.append(skill('Illumination','ranged',[1,2,3],[1,2,3,4],lambda: random.randint(4,8),-0.75,0.9,0,None,None))
 classes[0].skills.append(skill('Hand of Light','ranged',[1,2],[1,2,3],lambda: random.randint(4,8),-0.5,0.85,0.01,None,None))
-classes.append(class_char('shieldbreaker',20,8,0,5,0,0.06,0.5,0.2,0.3,0.5,0.3,0.3,0.2,0.67))
+classes.append(class_char('shieldbreaker',20,0.08,0,5,0,0.06,0.5,0.2,0.3,0.5,0.3,0.3,0.2,0.67))
 classes[1].skills.append(skill('Pierce','melee',[1,2,3],[1,2,3,4],lambda: random.randint(5,10),-0.1,0.9,0.05,None,None))
 classes[1].skills.append(skill('Puncture','ranged',[1,2,3,4],[1,2,3,4],lambda: random.randint(5,10),-0.5,0.9,0,None,None))
 classes[1].skills.append(skill("Adder's Kiss",'melee',[1],[1,2],lambda: random.randint(5,10),0,0.9,0.05,None,None))
@@ -213,7 +216,7 @@ classes[1].skills.append(skill('Impale','ranged',[1],[19],lambda: random.randint
 classes[1].skills.append(skill('Expose','melee',[1,2,3],[1,2,3],lambda: random.randint(5,10),-0.4,0.85,0.025,None,None))
 classes[1].skills.append(skill('Captivate','ranged',[2,3],[2,3],lambda: random.randint(5,10),-0.25,0.85,0.04,None,None))
 classes[1].skills.append(skill('Serpent Sway','support',[1,2,3],[1,2,3],lambda: 0,0,1.0,0,None,None))
-classes.append(class_char('abomination',26,7.5,0,7,0,0.02,0.4,0.6,0.2,0.4,0.3,0.2,0.1,0.67))
+classes.append(class_char('abomination',26,0.075,0,7,0,0.02,0.4,0.6,0.2,0.4,0.3,0.2,0.1,0.67))
 #no transform yet :(
 classes[2].skills.append(skill('Manacles','ranged',[2,3],[1,2,3],lambda: random.randint(6,11),-0.6,0.95,0.01,None,None))
 classes[2].skills.append(skill("Beast's Bile",'ranged',[2,3],[15],lambda: random.randint(6,11),-0.9,0.95,0.02,None,None))
@@ -221,7 +224,7 @@ classes[2].skills.append(skill('Absolution','support',[1,2,3,4],[1,2,3,4],lambda
 classes[2].skills.append(skill('Rake','melee',[1,2],[13],lambda: random.randint(6,11),-0.5,0.90,-0.03,None,None))
 classes[2].skills.append(skill('Rage','melee',[2,3],[1,2,3],lambda: random.randint(6,11),0,0.85,0.075,None,None))
 classes[2].skills.append(skill('Slam','melee',[1,2,3],[1,2],lambda: random.randint(6,11),-0.25,0.8,0.01,None,None))
-classes.append(class_char('antiquarian',17,10,0,5,0,0.01,0.2,0.2,0.2,0.2,0.2,0.2,0.1,0.67))
+classes.append(class_char('antiquarian',17,0.1,0,5,0,0.01,0.2,0.2,0.2,0.2,0.2,0.2,0.1,0.67))
 classes[3].skills.append(skill('Nervous Stab','melee',[1,2,3,4],[1,2,3],lambda: random.randint(3,5),0,0.85,0.03,None,None))
 classes[3].skills.append(skill('Festering Vapours','ranged',[1,2,3,4],[1,2,3],lambda: random.randint(3,5),-0.75,0.95,0,None,None))
 classes[3].skills.append(skill('Get Down!','support',[1,2,3,4],[1,2,3,4],lambda: 0,0,1.0,0,None,None))
@@ -237,7 +240,7 @@ classes[4].skills.append(skill('Bola','ranged',[3,4],[13],lambda: random.randint
 classes[4].skills.append(skill('Blind Fire','ranged',[1,2,3,4],[1,2,3,4],lambda: random.randint(4,8),-0.1,0.75,0,None,None))
 classes[4].skills.append(skill('Battlefield Bandage','support',[3,4],[1,2,3,4],lambda: -random.randint(2,3),0,1.0,0,None,None))
 classes[4].skills.append(skill('Rallying Fire','ranged',[1,2,3,4],[19],lambda: random.randint(4,8),-1,0.95,0,None,None))
-classes.append(class_char('bounty_hunter',25,5,0,5,0,0.04,0.4,0.3,0.2,0.4,0.3,0.3,0.4,0.67))
+classes.append(class_char('bounty_hunter',25,0.05,0,5,0,0.04,0.4,0.3,0.2,0.4,0.3,0.3,0.4,0.67))
 classes[5].skills.append(skill('Collect Bounty','melee',[1,2,3],[1,2],lambda: random.randint(5,10),0,0.85,0.07,None,None))
 classes[5].skills.append(skill('Mark for Death','ranged',[1,2,3,4],[1,2,3,4],lambda: random.randint(5,10),-1,1.0,0,None,None))
 classes[5].skills.append(skill('Come Hither','ranged',[1,2,3,4],[3,4],lambda: random.randint(5,10),-0.8,1.0,0,None,None))
@@ -245,17 +248,17 @@ classes[5].skills.append(skill('Uppercut','melee',[1,2],[1,2],lambda: random.ran
 classes[5].skills.append(skill('Flashbang','ranged',[2,3,4],[2,3,4],lambda: random.randint(5,10),-1,0.95,0,None,None))
 classes[5].skills.append(skill('Finish Hmi','melee',[1,2,3],[1,2,3],lambda: random.randint(5,10),0,0.85,0.05,None,None))
 classes[5].skills.append(skill('Caltrops','ranged',[2,3,4],[3,4],lambda: random.randint(5,10),-0.95,0.9,0.05,None,None))
-classes.append(class_char('crusader',33,5,0,1,0,0.03,0.4,0.3,0.3,0.4,0.3,0.3,0.1,0.67))
+classes.append(class_char('crusader',33,0.05,0,1,0,0.03,0.4,0.3,0.3,0.4,0.3,0.3,0.1,0.67))
 classes.append(class_char('flagellant',22,0,0,6,0,0.02,0.5,0.3,0.4,0.5,0.65,0.3,0.0,0.73))
-classes.append(class_char('grave_robber',20,10,0,8,0,0.06,0.2,0.5,0.3,0.2,0.3,0.3,0.5,0.67))
-classes.append(class_char('hellion',26,10,0,4,0,0.05,0.4,0.4,0.3,0.4,0.4,0.3,0.2,0.67))
-classes.append(class_char('highwayman',23,10,0,5,0,0.05,0.3,0.3,0.3,0.3,0.3,0.3,0.4,0.67))
-classes.append(class_char('houndmaster',21,10,0,5,0,0.04,0.4,0.4,0.3,0.4,0.4,0.3,0.4,0.67))
-classes.append(class_char('jester',19,15,0,7,0,0.04,0.2,0.4,0.2,0.2,0.3,0.4,0.3,0.67))
+classes.append(class_char('grave_robber',20,0.1,0,8,0,0.06,0.2,0.5,0.3,0.2,0.3,0.3,0.5,0.67))
+classes.append(class_char('hellion',26,0.1,0,4,0,0.05,0.4,0.4,0.3,0.4,0.4,0.3,0.2,0.67))
+classes.append(class_char('highwayman',23,0.1,0,5,0,0.05,0.3,0.3,0.3,0.3,0.3,0.3,0.4,0.67))
+classes.append(class_char('houndmaster',21,0.1,0,5,0,0.04,0.4,0.4,0.3,0.4,0.4,0.3,0.4,0.67))
+classes.append(class_char('jester',19,0.15,0,7,0,0.04,0.2,0.4,0.2,0.2,0.3,0.4,0.3,0.67))
 classes.append(class_char('leper',35,0,0,2,0,0.01,0.6,0.4,0.2,0.6,0.1,0.4,0.1,0.67))
-classes.append(class_char('man-at-arms',31,5,0,3,0,0.02,0.4,0.3,0.3,0.4,0.4,0.3,0.1,0.67))
+classes.append(class_char('man-at-arms',31,0.05,0,3,0,0.02,0.4,0.3,0.3,0.4,0.4,0.3,0.1,0.67))
 classes.append(class_char('musketeer',27,0,0,3,0,0.06,0.4,0.3,0.3,0.4,0.3,0.3,0.1,0.67))
-classes.append(class_char('occultist',19,10,0,6,0,0.06,0.2,0.3,0.4,0.2,0.4,0.6,0.1,0.67))
+classes.append(class_char('occultist',19,0.1,0,6,0,0.06,0.2,0.3,0.4,0.2,0.4,0.6,0.1,0.67))
 classes.append(class_char('plague_doctor',22,0,0,7,0,0.02,0.2,0.6,0.5,0.2,0.2,0.5,0.2,0.67))
 global f
 f = object()
@@ -327,7 +330,9 @@ async def start(ctx):
         for i in f.chars:
             order.append([i,random.randint(0,8)+i[1].spd])
         order = quicksort(order,0,len(order)-1)
-        for i in range(len(order)):
+        i=0
+        while i<len(order):
+        #for i in range(len(order)):
             if order[i][0] in f.cmonsters:
                 pos = 1
                 idx = f.cmonsters.index(order[i][0])
@@ -342,8 +347,8 @@ async def start(ctx):
                 if not available:
                     await ctx.channel.send(f'{order[i][0].name} passes')
                     continue
-                for s in available:
-                    print(s.name)
+                for a in available:
+                    print(a.name)
                 used_skill = random.choice(available)
                 rank = random.choice(used_skill.target)
                 if used_skill.type=='support':
@@ -355,6 +360,9 @@ async def start(ctx):
                             inc=3
                         while(rank>10 or inc+1<len(f.cmonsters)):
                             heal = used_skill.dmg()
+                            for m in f.cmonsters:
+                                if m.size>1:
+                                    inc-=(m.size-1)
                             await ctx.channel.send(f'{order[i][0].name} uses {used_skill.name} against {f.cmonsters[inc-1].name}')
                             if random.random() < used_skill.crit_mod:
                                 heal = heal*2
@@ -365,7 +373,10 @@ async def start(ctx):
                             inc+=1
                     else:
                         heal = used_skill.dmg()
-                        await ctx.channel.send(f'{order[i][0].name} uses {used_skill.name} against {f.chars[rank-1].name}')
+                        for m in f.cmonsters:
+                            if m.size>1:
+                                rank-=(m.size-1)
+                        await ctx.channel.send(f'{order[i][0].name} uses {used_skill.name} against {f.cmonsters[rank-1].name}')
                         if random.random() < used_skill.crit_mod:
                             heal = heal*2
                             await ctx.channel.send('CRIT')
@@ -381,24 +392,29 @@ async def start(ctx):
                         while(rank>10 or inc+1<len(f.chars)):
                             damage = int(used_skill.dmg()*(1-f.chars[inc-1][1].prot))
                             await ctx.channel.send(f'{order[i][0].name} uses {used_skill.name} against {f.chars[inc-1][2]} the {f.chars[inc-1][1].name}')
-                            if random.random()>used_skill.acc:
+                            if random.random()>used_skill.acc-f.chars[inc-1][1].dodge:
                                 rank-=inc
                                 inc+=1
                                 await ctx.channel.send('MISS')
                                 continue
                             if random.random() < used_skill.crit_mod:
                                 damage = damage*2
-                                for i in f.chars:
-                                    i[1].stress+=random.randint(2,6)
+                                for z in f.chars:
+                                    z[1].stress+=random.randint(2,6)
                                 await ctx.channel.send('CRIT')
                             await ctx.channel.send(f'causing {damage} dmg')
                             if f.chars[inc-1][1].hp<=0:
                                 f.chars[inc-1][1].hp=0
                                 if random.random()>f.chars[inc-1][1].death_blow:
+                                    for o in order:
+                                        if c[0][1].id==f.chars[inc-1][1].id:
+                                            order.remove(c)
+                                            break
                                     f.chars.pop(inc-1)
-                                    for i in f.chars:
-                                        i[1].stress+=random.randint(10,20)
+                                    for z in f.chars:
+                                        z[1].stress+=random.randint(10,20)
                                     await ctx.channel.send('DEATHBLOW')
+                                    
                                 else:
                                     await ctx.channel.send("Death's Door")
                             else: 
@@ -408,21 +424,26 @@ async def start(ctx):
                     else:
                         damage = int(used_skill.dmg()*(1-f.chars[rank-1][1].prot))
                         await ctx.channel.send(f'{order[i][0].name} uses {used_skill.name} against {f.chars[rank-1][2]} the {f.chars[rank-1][1].name}')
-                        if random.random()>used_skill.acc:
+                        if random.random()>used_skill.acc-f.chars[rank-1][1].dodge:
                             await ctx.channel.send('MISS')
+                            i+=1
                             continue
                         if random.random() < used_skill.crit_mod:
                             damage = damage*2
-                            for i in f.chars:
-                                i[1].stress+=random.randint(2,6)
+                            for z in f.chars:
+                                z[1].stress+=random.randint(2,6)
                             await ctx.channel.send('CRIT')
                         await ctx.channel.send(f'causing {damage} dmg')
                         if f.chars[rank-1][1].hp<=0:
                             f.chars[rank-1][1].hp=0
                             if random.random()>f.chars[rank-1][1].death_blow:
+                                for c in order:
+                                    if c[0][1].id==f.chars[rank-1][1].id:
+                                        order.remove(c)
+                                        break
                                 f.chars.pop(rank-1)
-                                for i in f.chars:
-                                    i[1].stress+=random.randint(10,20)
+                                for z in f.chars:
+                                    z[1].stress+=random.randint(10,20)
                                 await ctx.channel.send('DEATHBLOW')
                             else:
                                 await ctx.channel.send("Death's Door")
@@ -433,10 +454,11 @@ async def start(ctx):
             else:
                 user = discord.utils.get(ctx.channel.guild.members, id=order[i][0][0])
                 await ctx.channel.send(f"{user.mention} {order[i][0][2]}'s turn")
-                def check(m):
-                    return m.content =='test' and m.channel==ctx.channel and m.author.id==order[i][0][0]
-                msg = await client.wait_for('message',check=check)
+                #def check(m):
+                #    return m.content =='test' and m.channel==ctx.channel and m.author.id==order[i][0][0]
+                #msg = await client.wait_for('message',check=check)
                 await asyncio.sleep(2)
+            i+=1
         await ctx.channel.send('next turn')
         await asyncio.sleep(3)
         #for i in range(len(order)):
@@ -484,9 +506,11 @@ async def rand(ctx):
     else:
         for i in range(4):
             f.chars.append([ctx.author.id,deepcopy(random.choice(classes)),'test'+str(random.randint(0,10000)),[]])
+            f.chars[-1][1].id=random.choice(f.ids)
+            f.ids.remove(f.chars[-1][1].id)
         await show(ctx)
 @client.command()
-async def join(ctx,klass,name,quirks_char):
+async def join(ctx,klass,name,quirks_char='[]'):
     if len(f.chars)>=4:
         await ctx.channel.send('Party is full')
     else:
@@ -515,6 +539,8 @@ async def join(ctx,klass,name,quirks_char):
                 await ctx.channel.send("Too much quirks of one type")
             else:
                 f.chars.append([ctx.author.id,deepcopy(klass),name,final])
+                f.chars[-1][1].id=random.choice(f.ids)
+                f.ids.remove(f.chars[-1][1].id)
                 await show(ctx)
 #@client.command(pass_context=True)
 #async def whispers(ctx):
