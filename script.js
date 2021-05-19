@@ -1,21 +1,27 @@
 let car = document.querySelector('.car')
-let t = 0
-let l = 0
+let posx = 0
+let posy = 0
+let change = 5
+let angle = 0
 document.addEventListener('keydown', function(event) {
     if(event.key == "w") {
-		t+=5
-        car.style.top=t+"px";
+		posx-=change*Math.cos(angle+Math.PI)
+		posy-=change*-Math.sin(angle+Math.PI)
+        car.style.top=posx+"px";
+		car.style.left=posy+"px";
     }
-    else if(event.key == "a") {
-		l-=5
-        car.style.left=l+"px";
+    if(event.key == "a") {
+		angle-=0.1
+        car.style.transform="rotate("+(angle+Math.PI)+"rad) scaleY(0.5) scaleX(0.5)";
     }
-	else if(event.key == "s") {
-		t-=5
-        car.style.top=t+"px";
+	if(event.key == "s") {
+		posx+=change*Math.cos(angle+Math.PI)
+		posy+=change*-Math.sin(angle+Math.PI)
+        car.style.top=posx+"px";
+		car.style.left=posy+"px";
     }
-	else if(event.key == "d") {
-		l+=5
-        car.style.left=l+"px";
+	if(event.key == "d") {
+		angle+=0.1
+		car.style.transform="rotate("+(angle+Math.PI)+"rad) scaleY(0.5) scaleX(0.5)";
     }
 });
