@@ -78,7 +78,7 @@ class fight_class():
                 break
         self.chars = []
         for i in self.cmonsters:
-            print(i.id)
+            print(i.name)
     def __del__(self):
         print('The end')
 class monster:
@@ -194,7 +194,7 @@ monsters[13].skills.append(skill('Infuse','melee',[1,2],[1,2],lambda: random.ran
 monsters.append(monster('Big_Adder','beast',45,5.0,0.2,4,0.5,0.75,0.2,0.4,0.8,['ruins','weald','warrens','cove'],2))
 monsters[14].skills.append(skill("Adder's Fang",'ranged',[1,2,3,4],[1,2,3,4],lambda: random.randint(2,4),0,0.925,0.02,None,None))
 monsters[14].skills.append(skill('Paralyzing Quills','melee',[1,2,3],[1,2,3],lambda: random.randint(5,9),0,0.975,0.02,None,None))
-monsters[14].skills.append(skill('Molt','support',[2,3],[2,3],lambda: -8,0,1,0,None,None))
+monsters[14].skills.append(skill('Molt','support',[2,3],[0],lambda: -8,0,1,0,None,None))
 #monsters.append(monster('Sycophant','bloodsucker',12,10.0,0.0,10,0.15,0.8,0.15,0.4,0.05,['ruins','weald','warrens','cove'],1))
 #monsters.append(monster('Ghoul',8,0,0,1,0.1,0.1,2.0,0.15,0.1,['ruins','weald','warrens','cove'],2))
 #monsters.append(monster('Gargoyle',8,0,0,1,0.1,0.1,2.0,0.15,0.1,['ruins','weald','warrens','cove'],1))
@@ -227,7 +227,7 @@ classes[2].skills.append(skill('Slam','melee',[1,2,3],[1,2],lambda: random.randi
 classes.append(class_char('antiquarian',17,0.1,0,5,0,0.01,0.2,0.2,0.2,0.2,0.2,0.2,0.1,0.67))
 classes[3].skills.append(skill('Nervous Stab','melee',[1,2,3,4],[1,2,3],lambda: random.randint(3,5),0,0.85,0.03,None,None))
 classes[3].skills.append(skill('Festering Vapours','ranged',[1,2,3,4],[1,2,3],lambda: random.randint(3,5),-0.75,0.95,0,None,None))
-classes[3].skills.append(skill('Get Down!','support',[1,2,3,4],[1,2,3,4],lambda: 0,0,1.0,0,None,None))
+classes[3].skills.append(skill('Get Down!','support',[1,2,3,4],[0],lambda: 0,0,1.0,0,None,None))
 classes[3].skills.append(skill('Flashpowder','ranged',[1,2,3,4],[1,2,3,4],lambda: random.randint(3,5),-1.0,0.95,0,None,None))
 classes[3].skills.append(skill('Fortyfying Vapours','support',[3,4],[19],lambda: -1,0,1.0,0,None,None))
 classes[3].skills.append(skill('Invigorating Vapours','support',[3,4],[1,2,3,4],lambda: 0,0,1.0,0,None,None))
@@ -246,26 +246,110 @@ classes[5].skills.append(skill('Mark for Death','ranged',[1,2,3,4],[1,2,3,4],lam
 classes[5].skills.append(skill('Come Hither','ranged',[1,2,3,4],[3,4],lambda: random.randint(5,10),-0.8,1.0,0,None,None))
 classes[5].skills.append(skill('Uppercut','melee',[1,2],[1,2],lambda: random.randint(5,10),-0.67,0.9,0,None,None))
 classes[5].skills.append(skill('Flashbang','ranged',[2,3,4],[2,3,4],lambda: random.randint(5,10),-1,0.95,0,None,None))
-classes[5].skills.append(skill('Finish Hmi','melee',[1,2,3],[1,2,3],lambda: random.randint(5,10),0,0.85,0.05,None,None))
+classes[5].skills.append(skill('Finish Him','melee',[1,2,3],[1,2,3],lambda: random.randint(5,10),0,0.85,0.05,None,None))
 classes[5].skills.append(skill('Caltrops','ranged',[2,3,4],[3,4],lambda: random.randint(5,10),-0.95,0.9,0.05,None,None))
 classes.append(class_char('crusader',33,0.05,0,1,0,0.03,0.4,0.3,0.3,0.4,0.3,0.3,0.1,0.67))
+classes[6].skills.append(skill('Smite','melee',[1,2],[1,2],lambda: random.randint(6,12),0,0.85,0,None,None))
+classes[6].skills.append(skill('Zealous Accusation','ranged',[1,2],[13],lambda: random.randint(6,12),-0.4,0.85,-0.04,None,None))
+classes[6].skills.append(skill('Stunning blow','melee',[1,2],[1,2],lambda: random.randint(6,12),-0.5,0.9,0,None,None))
+classes[6].skills.append(skill('Bulwark of faith','support',[1,2],[0],lambda: 0,0,1.0,0,None,None))
+classes[6].skills.append(skill('Battle heal','support',[1,2,3,4],[1,2,3,4],lambda: -random.randint(2,3),0,1.0,0,None,None))
+classes[6].skills.append(skill('Holy Lance','melee',[3,4],[2,3,4],lambda: random.randint(6,12),0,0.85,0.065,None,None))
+classes[6].skills.append(skill('Inspiring Cry','support',[1,2,3,4],[1,2,3,4],lambda: -1,0,1.05,0,None,None))
 classes.append(class_char('flagellant',22,0,0,6,0,0.02,0.5,0.3,0.4,0.5,0.65,0.3,0.0,0.73))
+classes[7].skills.append(skill('Punish','melee',[1,2],[1,2],lambda: random.randint(3,6),0,0.95,0.05,None,None))
+classes[7].skills.append(skill('Rain of Sorrows','melee',[1,2],[17],lambda: random.randint(3,6),-0.67,0.95,0.01,None,None))
+classes[7].skills.append(skill('Exsanguinate','melee',[1,2],[1,2],lambda: random.randint(3,6),0,0.9,0.03,None,None))
+classes[7].skills.append(skill('Reclaim','support',[1,2,3,4],[1,2,3,4],lambda: -2,0,1.0,0,None,None))#healing in effects
+classes[7].skills.append(skill('Redeem','support',[1,2,3,4],[1,2,3,4],lambda: -3,0,0.9,0.03,None,None))#healing in effects
+classes[7].skills.append(skill('Endure','support',[1,2,3,4],[1,2,3,4],lambda: 0,0,0.9,0.03,None,None))
+classes[7].skills.append(skill('Suffer','support',[1,2,3,4],[1,2,3,4],lambda: 0,0,0.9,0.03,None,None))
 classes.append(class_char('grave_robber',20,0.1,0,8,0,0.06,0.2,0.5,0.3,0.2,0.3,0.3,0.5,0.67))
+classes[8].skills.append(skill('Pick to the face','melee',[1,2,3],[1,2],lambda: random.randint(4,8),-0.15,0.9,0.01,None,None))
+classes[8].skills.append(skill('Lunge','melee',[3,4],[1,2,3],lambda: random.randint(4,8),+0.4,0.95,0.08,None,None))
+classes[8].skills.append(skill('Flashing Daggers','ranged',[1,2,3],[15],lambda: random.randint(4,8),-0.33,0.9,-0.05,None,None))
+classes[8].skills.append(skill('Shadow Fade','support',[1,2],[0],lambda: 0,0,1.0,0,None,None))
+classes[8].skills.append(skill('Thrown Dagger','ranged',[2,3,4],[2,3,4],lambda: random.randint(4,8),-0.1,0.9,0.08,None,None))
+classes[8].skills.append(skill('Poison Dart','ranged',[2,3,4],[1,2,3,4],lambda: random.randint(4,8),-0.6,0.95,0.075,None,None))
+classes[8].skills.append(skill('Toxin Trickery','support',[1,2,3,4],[0],lambda: 0,0,1.0,0,None,None))
 classes.append(class_char('hellion',26,0.1,0,4,0,0.05,0.4,0.4,0.3,0.4,0.4,0.3,0.2,0.67))
+classes[9].skills.append(skill('Wicked Hack','melee',[1,2],[1,2],lambda: random.randint(6,12),0,0.85,0.04,None,None))
+classes[9].skills.append(skill('Iron Swan','melee',[1],[4],lambda: random.randint(6,12),0,0.85,0.05,None,None))
+classes[9].skills.append(skill('Barbaric YAWP!','melee',[1,2],[13],lambda: random.randint(6,12),-1,0.95,0,None,None))
+classes[9].skills.append(skill('If It Bleeds','melee',[1,2,3],[2,3],lambda: random.randint(6,12),-0.35,0.85,0,None,None))
+classes[9].skills.append(skill('Breakthrough','melee',[2,3,4],[16],lambda: random.randint(6,12),-0.5,0.85,-0.01,None,None))
+classes[9].skills.append(skill('Adrenaline Rush','support',[1,2,3,4],[0],lambda: -1,0,1.0,0,None,None))
+classes[9].skills.append(skill('Bleed Out','melee',[1],[1],lambda: random.randint(6,12),+0.2,0.85,0.06,None,None))
 classes.append(class_char('highwayman',23,0.1,0,5,0,0.05,0.3,0.3,0.3,0.3,0.3,0.3,0.4,0.67))
+classes[10].skills.append(skill('Wicked Slice','melee',[1,2,3],[1,2],lambda: random.randint(5,10),+0.15,0.85,0.05,None,None))
+classes[10].skills.append(skill('Pistol Shot','ranged',[2,3,4],[2,3,4],lambda: random.randint(5,10),-0.15,0.85,0.075,None,None))
+classes[10].skills.append(skill('Point Blank Shot','ranged',[1],[1],lambda: random.randint(5,10),+0.5,0.95,0.05,None,None))
+classes[10].skills.append(skill('Grapeshot Blast','ranged',[2,3],[16],lambda: random.randint(5,10),-0.5,0.75,-0.09,None,None))
+classes[10].skills.append(skill('Tracking Shot','ranged',[1,2,3,4],[2,3,4],lambda: random.randint(5,10),-0.8,0.95,0,None,None))
+classes[10].skills.append(skill("Duelist's Advance",'melee',[2,3,4],[1,2,3],lambda: random.randint(5,10),-0.2,0.9,0.05,None,None))
+classes[10].skills.append(skill('Open Vein','melee',[1,2,3],[1,2],lambda: random.randint(5,10),-0.15,0.95,0,None,None))
 classes.append(class_char('houndmaster',21,0.1,0,5,0,0.04,0.4,0.4,0.3,0.4,0.4,0.3,0.4,0.67))
+classes[11].skills.append(skill("Hound's Rush",'melee',[2,3,4],[1,2,3,4],lambda: random.randint(4,7),0,0.85,0.05,None,None))
+classes[11].skills.append(skill("Hound's Harry",'melee',[1,2,3,4],[19],lambda: random.randint(4,7),-0.75,0.85,-0.05,None,None))
+classes[11].skills.append(skill('Target Whistle','melee',[1,2,3,4],[1,2,3,4],lambda: random.randint(4,7),-1.0,1.0,0,None,None))
+classes[11].skills.append(skill('Cry Havoc','support',[3,4],[19],lambda: 0,0,1.0,0,None,None))
+classes[11].skills.append(skill('Guard Dog','support',[1,2,3,4],[1,2,3,4],lambda: 0,0,1.0,0,None,None))
+classes[11].skills.append(skill('Lick Wounds','support',[1,2,3,4],[0],lambda: -4,0,1.0,0,None,None))
+classes[11].skills.append(skill('Blackjack','melee',[1,2],[1,2,3],lambda: random.randint(4,7),-0.65,0.95,0,None,None))
 classes.append(class_char('jester',19,0.15,0,7,0,0.04,0.2,0.4,0.2,0.2,0.3,0.4,0.3,0.67))
+classes[12].skills.append(skill('Dirk Stab','melee',[1,2,3,4],[1,2,3],lambda: random.randint(4,7),0,0.95,0.05,None,None))
+classes[12].skills.append(skill('Harvest','melee',[1,2,3,4],[15],lambda: random.randint(4,7),-0.5,0.9,0,None,None))
+classes[12].skills.append(skill('Finale','melee',[1,2],[1,2,3,4],lambda: random.randint(4,7),+0.5,1.4,0.05,None,None))
+classes[12].skills.append(skill('Solo','ranged',[3,4],[1,2,3,4],lambda: random.randint(4,7),-1.0,1.25,0,None,None))
+classes[12].skills.append(skill('Slice Off','melee',[2,3],[2,3],lambda: random.randint(4,7),-0.33,0.95,0.08,None,None))
+classes[12].skills.append(skill('Battle Ballad','support',[3,4],[19],lambda: 0,0,1.0,0,None,None))
+classes[12].skills.append(skill('Inspiring Tune','support',[3,4],[1,2,3],lambda: 0,0,1.0,0,None,None))
 classes.append(class_char('leper',35,0,0,2,0,0.01,0.6,0.4,0.2,0.6,0.1,0.4,0.1,0.67))
+classes[13].skills.append(skill('Chop','melee',[1,2],[1,2],lambda: random.randint(8,16),0,0.75,0.03,None,None))
+classes[13].skills.append(skill('Hew','melee',[1,2],[13],lambda: random.randint(8,16),-0.5,0.75,-0.04,None,None))
+classes[13].skills.append(skill('Purge','melee',[1],[1],lambda: random.randint(8,16),-0.4,0.85,0,None,None))
+classes[13].skills.append(skill('Revenge','support',[1,2,3,4],[0],lambda: 0,0,1.0,0,None,None))
+classes[13].skills.append(skill('Withstand','support',[1,2,3],[0],lambda: 0,0,1.0,0,None,None))
+classes[13].skills.append(skill('Solemnity','support',[1,2],[0],lambda: -6,0,1.0,0,None,None))
+classes[13].skills.append(skill('Intimidate','melee',[1],[1,2,3,4],lambda: random.randint(8,16),-0.85,0.95,0,None,None))
 classes.append(class_char('man-at-arms',31,0.05,0,3,0,0.02,0.4,0.3,0.3,0.4,0.4,0.3,0.1,0.67))
+classes[14].skills.append(skill('Chop','melee',[1,2],[1,2,3],lambda: random.randint(5,9),0,0.85,0.05,None,None))
+classes[14].skills.append(skill('Rampart','melee',[1,2,3],[1,2],lambda: random.randint(5,9),-0.6,0.9,0.05,None,None))
+classes[14].skills.append(skill('Bellow','ranged',[1,2,3,4],[19],lambda: random.randint(5,9),-1.0,0.9,0,None,None))
+classes[14].skills.append(skill('Defender','support',[1,2,3,4],[1,2,3,4],lambda: 0,0,1.0,0,None,None))
+classes[14].skills.append(skill('Retribution','melee',[1,2,3],[1,2,3],lambda: random.randint(5,9),-0.75,0.85,0.025,None,None))
+classes[14].skills.append(skill('Command','support',[1,2,3,4],[19],lambda: 0,0,1.0,0,None,None))
+classes[14].skills.append(skill('Bolster','support',[1,2,3,4],[19],lambda: 0,0,1.0,0,None,None))
 classes.append(class_char('musketeer',27,0,0,3,0,0.06,0.4,0.3,0.3,0.4,0.3,0.3,0.1,0.67))
+classes[15].skills.append(skill('Aimed Shot','ranged',[3,4],[2,3,4],lambda: random.randint(4,8),0,0.95,0.05,None,None))
+classes[15].skills.append(skill('Smokescreen','ranged',[3,4],[17],lambda: random.randint(4,8),-0.8,0.95,-0.1,None,None))
+classes[15].skills.append(skill('Call the Shot','ranged',[3,4],[2,3,4],lambda: random.randint(4,8),-1.0,1.0,0,None,None))
+classes[15].skills.append(skill('Buckshot','ranged',[3,4],[13],lambda: random.randint(4,8),-0.5,0.95,0.02,None,None))
+classes[15].skills.append(skill('Sidearm','ranged',[1,2,3,4],[1,2,3,4],lambda: random.randint(4,8),-0.1,0.75,0,None,None))
+classes[15].skills.append(skill('Patch Up','support',[3,4],[1,2,3,4],lambda: -random.randint(2,3),0,1.0,0,None,None))
+classes[15].skills.append(skill('Skeet Shot','ranged',[3,4],[19],lambda: random.randint(4,8),-1.0,0.95,0,None,None))
 classes.append(class_char('occultist',19,0.1,0,6,0,0.06,0.2,0.3,0.4,0.2,0.4,0.6,0.1,0.67))
+classes[16].skills.append(skill('Sacrificial Stab','melee',[1,2,3],[1,2,3],lambda: random.randint(4,7),0,0.8,0.09,None,None))
+classes[16].skills.append(skill('Abyssal Artillery','ranged',[3,4],[17],lambda: random.randint(4,7),-0.33,0.85,0,None,None))
+classes[16].skills.append(skill('Weakening Curse','ranged',[1,2,3,4],[1,2,3,4],lambda: random.randint(4,7),-0.75,0.95,0.05,None,None))
+classes[16].skills.append(skill('Wyrd Reconstruction','support',[1,2,3,4],[1,2,3,4],lambda: -random.randint(0,13),0,1.0,0,None,None))
+classes[16].skills.append(skill('Vurnelability Hex','ranged',[1,2,3,4],[1,2,3,4],lambda: random.randint(4,7),-0.9,0.95,0.05,None,None))
+classes[16].skills.append(skill('Hands from the Abyss','ranged',[1,2],[1,2,3],lambda: random.randint(4,7),-0.5,0.9,0.09,None,None))
+classes[16].skills.append(skill("Demon's Pull",'ranged',[2,3,4],[3,4],lambda: random.randint(4,7),-0.5,0.9,0.05,None,None))
 classes.append(class_char('plague_doctor',22,0,0,7,0,0.02,0.2,0.6,0.5,0.2,0.2,0.5,0.2,0.67))
+classes[17].skills.append(skill('Noxious Blast','ranged',[2,3,4],[1,2],lambda: random.randint(4,7),-0.8,0.95,0.05,None,None))
+classes[17].skills.append(skill('Plague Grenade','ranged',[3,4],[13],lambda: random.randint(4,7),-0.9,0.95,0,None,None))
+classes[17].skills.append(skill('Blinding Gas','ranged',[3,4],[13],lambda: random.randint(4,7),-1.0,0.95,0,None,None))
+classes[17].skills.append(skill('Incision','melee',[1,2,3],[1,2],lambda: random.randint(4,7),0,0.85,0.05,None,None))
+classes[17].skills.append(skill('Battlefield Medicine','support',[3,4],[1,2,3,4],lambda: random.randint(1,1),0,1.0,0,None,None))
+classes[17].skills.append(skill('Emboldening Vapours','support',[1,2,3,4],[1,2,3,4],lambda: 0,0,1.0,0,None,None))
+classes[17].skills.append(skill('Disorienting Blast','ranged',[1,2,3],[2,3,4],lambda: random.randint(4,7),-1.0,0.95,0,None,None))
 global f
 f = object()
 @client.command()
 async def help(ctx,option=None):
     if(option=='fight'):
-        embed = discord.Embed(title='fight',description='Darkest Dungeon Combat Simulator version: alpha 0.0.5',colour = discord.Colour.green())
+        embed = discord.Embed(title='fight',description='Darkest Dungeon Combat Simulator version: alpha 0.0.6',colour = discord.Colour.green())
         embed.add_field(name='fight *location*',value='starts a new fight in *location*. No given location will start in random place',inline=True)
         embed.add_field(name='retreat',value='retreats from the fight',inline=True)
         embed.add_field(name='show',value='shows the composition of characters and enemies',inline=True)
@@ -369,8 +453,22 @@ async def start(ctx):
                                 await ctx.channel.send('CRIT')
                             await ctx.channel.send(f'healing {heal} dmg')
                             f.cmonsters[inc-1].hp-=heal
+                            if f.cmonsters[inc-1].hp>f.cmonsters[inc-1].max_hp:
+                                f.cmonsters[inc-1].hp=f.cmonsters[inc-1].max_hp
                             rank-=inc
                             inc+=1
+                    elif rank==0:
+                        for m in f.cmonsters:
+                            if m.id == order[i][0].id:
+                                heal = used_skill.dmg()
+                                await ctx.channel.send(f'{order[i][0].name} uses {used_skill.name} against self')
+                                if random.random() < used_skill.crit_mod:
+                                    heal = heal*2
+                                    await ctx.channel.send('CRIT')
+                                await ctx.channel.send(f'healing {heal} dmg')
+                                m.hp-=heal
+                                if m.hp>m.max_hp:
+                                    m.hp=m.max_hp
                     else:
                         heal = used_skill.dmg()
                         for m in f.cmonsters:
@@ -381,7 +479,9 @@ async def start(ctx):
                             heal = heal*2
                             await ctx.channel.send('CRIT')
                         await ctx.channel.send(f'healing {heal} dmg')
-                        f.cmonsters[inc-1].hp-=heal
+                        f.cmonsters[rank-1].hp-=heal
+                        if f.cmonsters[rank-1].hp>f.cmonsters[rank-1].max_hp:
+                            f.cmonsters[rank-1].hp=f.cmonsters[rank-1].max_hp
                 else:
                     if rank>10:
                         inc=1
@@ -454,9 +554,9 @@ async def start(ctx):
             else:
                 user = discord.utils.get(ctx.channel.guild.members, id=order[i][0][0])
                 await ctx.channel.send(f"{user.mention} {order[i][0][2]}'s turn")
-                #def check(m):
-                #    return m.content =='test' and m.channel==ctx.channel and m.author.id==order[i][0][0]
-                #msg = await client.wait_for('message',check=check)
+                def check(m):
+                    return m.content =='test' and m.channel==ctx.channel and m.author.id==order[i][0][0]
+                msg = await client.wait_for('message',check=check)
                 await asyncio.sleep(2)
             i+=1
         await ctx.channel.send('next turn')
@@ -493,7 +593,7 @@ async def show(ctx):
     back.save('fight.png')
     embed.add_field(name='```Heroes```',value='``` ```',inline=False)
     for i in range(len(f.chars)-1,-1,-1):
-        embed.add_field(name=f.chars[i][2],value=f'HP: {f.chars[i][1].hp}\nSTRESS: {f.chars[i][1].stress}',inline=True)
+        embed.add_field(name=f.chars[i][2],value=f'HP: {f.chars[i][1].hp}/{f.chars[i][1].max_hp}\nSTRESS: {f.chars[i][1].stress}',inline=True)
     embed.add_field(name='```Monsters```',value='``` ```',inline=False)
     for i in f.cmonsters:
         embed.add_field(name=i.name,value=f'HP: {i.hp}/{i.max_hp}',inline=True)
