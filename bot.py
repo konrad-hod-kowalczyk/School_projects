@@ -381,23 +381,23 @@ async def clear(ctx, amount=5):
 @client.command()
 async def class_list(ctx):
     embed = discord.Embed(title='classes',description="letter sizes don't matter",colour = discord.Colour.green())
-    embed.add_field(name='```vestal```',inline=True)
-    embed.add_field(name='```shieldbreaker```',inline=True)
-    embed.add_field(name='```abomination```',inline=True)
-    embed.add_field(name='```antiquarian```',inline=True)
-    embed.add_field(name='```arbalest```',inline=True)
-    embed.add_field(name='```bounty_hunter```',inline=True)
-    embed.add_field(name='```crusader```',inline=True)
-    embed.add_field(name='```flagellant```',inline=True)
-    embed.add_field(name='```grave_robber```',inline=True)
-    embed.add_field(name='```highwayman```',inline=True)
-    embed.add_field(name='```houndmaster```',inline=True)
-    embed.add_field(name='```jester```',inline=True)
-    embed.add_field(name='```leper```',inline=True)
-    embed.add_field(name='```man-at-arms```',inline=True)
-    embed.add_field(name='```musketeer```',inline=True)
-    embed.add_field(name='```occultist```',inline=True)
-    embed.add_field(name='```plague_doctor```',inline=True)
+    embed.add_field(name='```vestal```',value='Junia',inline=True)
+    embed.add_field(name='```shieldbreaker```',value='missing',inline=True)
+    embed.add_field(name='```abomination```',value='Bigby',inline=True)
+    embed.add_field(name='```antiquarian```',value='missing',inline=True)
+    embed.add_field(name='```arbalest```',value='Missandei',inline=True)
+    embed.add_field(name='```bounty_hunter```',value='Tardif',inline=True)
+    embed.add_field(name='```crusader```',value='Reynauld',inline=True)
+    embed.add_field(name='```flagellant```',value='missing',inline=True)
+    embed.add_field(name='```grave_robber```',value='Audrey',inline=True)
+    embed.add_field(name='```highwayman```',value='Dismas',inline=True)
+    embed.add_field(name='```houndmaster```',value='Shag & Scoob',inline=True)
+    embed.add_field(name='```jester```',value='Jingles',inline=True)
+    embed.add_field(name='```leper```',value='Baldwin',inline=True)
+    embed.add_field(name='```man-at-arms```',value='Barristan',inline=True)
+    embed.add_field(name='```musketeer```',value='missing',inline=True)
+    embed.add_field(name='```occultist```',value='Alhazred',inline=True)
+    embed.add_field(name='```plague_doctor```',value='Paracelsus',inline=True)
     await ctx.channel.send(embed=embed)
 @client.command()
 async def retreat(ctx):
@@ -431,8 +431,6 @@ async def start(ctx):
                 if not available:
                     await ctx.channel.send(f'{order[i][0].name} passes')
                     continue
-                for a in available:
-                    print(a.name)
                 used_skill = random.choice(available)
                 rank = random.choice(used_skill.target)
                 if used_skill.type=='support':
@@ -553,9 +551,22 @@ async def start(ctx):
                 await asyncio.sleep(2)
             else:
                 user = discord.utils.get(ctx.channel.guild.members, id=order[i][0][0])
+                available = []
+                pos = f.chars.index(order[i][0])
+                for j in order[i][0][1].skills:
+                    if pos in j.ranks and j.type == 'support' and not any([[k for k in j.target] == [l for l in range(len(f.chars))]]):
+                        available.append(j)
+                    if pos in j.ranks and j.type != 'support' and not any([[k for k in j.target] == [l for l in range(sum(d.size for d in f.cmonsters))]]):
+                        available.append(j)
+                embed = discord.Embed(title='Available skills',description="write name to use",colour = discord.Colour.green())
+                names = []
+                for j in available:
+                    names.append(j.name)
+                embed.add_field(name='Names',value=f"{names}",inline=True)
                 await ctx.channel.send(f"{user.mention} {order[i][0][2]}'s turn")
+                await ctx.channel.send(embed=embed)
                 def check(m):
-                    return m.content =='test' and m.channel==ctx.channel and m.author.id==order[i][0][0]
+                    return m.content in names and m.channel==ctx.channel and m.author.id==order[i][0][0]
                 msg = await client.wait_for('message',check=check)
                 await asyncio.sleep(2)
             i+=1
