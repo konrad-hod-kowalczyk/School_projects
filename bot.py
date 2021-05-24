@@ -165,7 +165,7 @@ monsters[5].skills.append(skill('Shank','melee',[1,2,3],[1,2,3,4],lambda: random
 monsters[5].skills.append(skill('Harmless Poke','melee',[4],[1,2,3,4],lambda: random.randint(2,4),0,0.425,0,None,None))
 monsters.append(monster('Brigand_Fusilier','human',12,7.5,0.0,6,0.25,0.2,0.2,0.15,0.25,['ruins','weald','warrens','cove'],1))
 monsters[6].skills.append(skill('Blanket Fire','ranged',[2,3,4],[19],lambda: random.randint(1,3),0,0.725,0,None,None))
-monsters[6].skills.append(skill('Accusation','melee',[1],[1,2,3],lambda: random.randint(2,4),0,0.625,0.06,None,None))
+monsters[6].skills.append(skill('Rush Shot','melee',[1],[1,2,3],lambda: random.randint(2,4),0,0.625,0.06,None,None))
 monsters.append(monster('Brigand_Bloodletter','human',35,0.0,0.0,1,0.5,0.2,0.2,0.15,0.75,['ruins','weald','warrens','cove'],2))
 monsters[7].skills.append(skill('Rain of Whips','melee',[1,2],[19],lambda: 1,0,0.825,0,None,None))
 monsters[7].skills.append(skill('Punishment','melee',[1,2,3,4],[1,2,3,4],lambda: random.randint(2,4),0,0.825,0.12,None,None))
@@ -313,7 +313,7 @@ classes[13].skills.append(skill('Withstand','support',[1,2,3],[0],lambda: 0,0,1.
 classes[13].skills.append(skill('Solemnity','support',[1,2],[0],lambda: -6,0,1.0,0,None,None))
 classes[13].skills.append(skill('Intimidate','melee',[1],[1,2,3,4],lambda: random.randint(8,16),-0.85,0.95,0,None,None))
 classes.append(class_char('man-at-arms',31,0.05,0,3,0,0.02,0.4,0.3,0.3,0.4,0.4,0.3,0.1,0.67))
-classes[14].skills.append(skill('Chop','melee',[1,2],[1,2,3],lambda: random.randint(5,9),0,0.85,0.05,None,None))
+classes[14].skills.append(skill('Crush','melee',[1,2],[1,2,3],lambda: random.randint(5,9),0,0.85,0.05,None,None))
 classes[14].skills.append(skill('Rampart','melee',[1,2,3],[1,2],lambda: random.randint(5,9),-0.6,0.9,0.05,None,None))
 classes[14].skills.append(skill('Bellow','ranged',[1,2,3,4],[19],lambda: random.randint(5,9),-1.0,0.9,0,None,None))
 classes[14].skills.append(skill('Defender','support',[1,2,3,4],[1,2,3,4],lambda: 0,0,1.0,0,None,None))
@@ -432,6 +432,11 @@ async def start(ctx):
                     await ctx.channel.send(f'{order[i][0].name} passes')
                     continue
                 used_skill = random.choice(available)
+                for j in used_skill.target:
+                    if j > len(f.cmonsters) and j < 10 and used_skill.type='support':
+                        used_skill.target.remove(j)
+                    if j > len(f.chars) and j < 10 and used_skill.type!='support':
+                        used_skill.target.remove(j)
                 rank = random.choice(used_skill.target)
                 if used_skill.type=='support':
                     if rank>10:
@@ -442,9 +447,6 @@ async def start(ctx):
                             inc=3
                         while(rank>10 or inc+1<len(f.cmonsters)):
                             heal = used_skill.dmg()
-                            for m in f.cmonsters:
-                                if m.size>1:
-                                    inc-=(m.size-1)
                             await ctx.channel.send(f'{order[i][0].name} uses {used_skill.name} against {f.cmonsters[inc-1].name}')
                             if random.random() < used_skill.crit_mod:
                                 heal = heal*2
@@ -469,9 +471,6 @@ async def start(ctx):
                                     m.hp=m.max_hp
                     else:
                         heal = used_skill.dmg()
-                        for m in f.cmonsters:
-                            if m.size>1:
-                                rank-=(m.size-1)
                         await ctx.channel.send(f'{order[i][0].name} uses {used_skill.name} against {f.cmonsters[rank-1].name}')
                         if random.random() < used_skill.crit_mod:
                             heal = heal*2
@@ -552,22 +551,100 @@ async def start(ctx):
             else:
                 user = discord.utils.get(ctx.channel.guild.members, id=order[i][0][0])
                 available = []
-                pos = f.chars.index(order[i][0])
+                names = []
+                names.append('pass')
+                pos = f.chars.index(order[i][0])+1
                 for j in order[i][0][1].skills:
                     if pos in j.ranks and j.type == 'support' and not any([[k for k in j.target] == [l for l in range(len(f.chars))]]):
                         available.append(j)
+                        names.append(j.name)
                     if pos in j.ranks and j.type != 'support' and not any([[k for k in j.target] == [l for l in range(sum(d.size for d in f.cmonsters))]]):
                         available.append(j)
-                embed = discord.Embed(title='Available skills',description="write name to use",colour = discord.Colour.green())
-                names = []
-                for j in available:
-                    names.append(j.name)
+                        names.append(j.name)
+                embed = discord.Embed(title=f"{order[i][0][1].name}",description="write name to use",colour = discord.Colour.green())
                 embed.add_field(name='Names',value=f"{names}",inline=True)
                 await ctx.channel.send(f"{user.mention} {order[i][0][2]}'s turn")
                 await ctx.channel.send(embed=embed)
                 def check(m):
                     return m.content in names and m.channel==ctx.channel and m.author.id==order[i][0][0]
                 msg = await client.wait_for('message',check=check)
+                print(msg.content)
+                if msg.content=='pass':
+                    i+=1
+                    await ctx.channel.send(f"{order[i][0][1].name} passes")
+                    continue
+                used_skill=''
+                for j in order[i][0][1].skills:
+                    if j.name == msg.content:
+                        used_skill=j
+                        break
+                if len(used_skill.target)<10:
+                    for j in used_skill.target:
+                        if j > len(f.cmonsters) and j < 10:
+                            used_skill.target.remove(j)
+                    embed = discord.Embed(title="Ranks",description=f"{used_skill.target}",colour = discord.Colour.green())
+                    await ctx.channel.send(embed=embed)
+                    def check2(m):
+                        return int(m.content) in used_skill.target and m.channel==ctx.channel and m.author.id==order[i][0][0] and int(m.content) <= len(f.cmonsters)
+                    msg2 = await client.wait_for('message',check=check2)
+                    rank = (int(msg2.content))-1
+                else:
+                    rank = used.skill.target[0]
+                if used_skill.type!='support':
+                    if rank>10:
+                        inc=1
+                        if rank==15 or rank==18:
+                            inc=2
+                        if rank==17:
+                            inc=3
+                        while(rank>10 or inc+1<len(f.cmonsters)):
+                            dmg = used_skill.dmg()
+                            await ctx.channel.send(f'{order[i][0][1].name} uses {used_skill.name} against {f.cmonsters[inc-1].name}')
+                            if random.random() > used_skill.acc-f.cmonsters[inc-1].dodge:
+                                i+=1
+                                rank-=inc
+                                inc+=1
+                                await ctx.channel.send('MISS')
+                                continue
+                            if random.random() < used_skill.crit_mod:
+                                dmg = dmg*2
+                                await ctx.channel.send('CRIT')
+                                for c in f.chars:
+                                    c.stress-=random.randint(0,4)
+                                    if c.stress<0:
+                                        c.stress=0
+                            await ctx.channel.send(f'dealing {dmg} dmg')
+                            f.cmonsters[inc-1].hp-=(dmg-dmg*f.cmonsters[inc-1].protection)
+                            if f.cmonsters[inc-1].hp<0:
+                                for m in order:
+                                    if m[0].id==f.cmonsters[inc-1].id:
+                                        order.remove(m)
+                                        f.cmonsters.remove(m)
+                                await ctx.channel.send('killing blow')
+                            rank-=inc
+                            inc+=1
+                    else:
+                        dmg = used_skill.dmg()
+                        await ctx.channel.send(f'{order[i][0][1].name} uses {used_skill.name} against {f.cmonsters[rank-1].name}')
+                        if random.random() > used_skill.acc-f.cmonsters[rank-1].dodge:
+                                await ctx.channel.send('MISS')
+                                i+=1
+                                continue
+                        if random.random() < used_skill.crit_mod:
+                            dmg = dmg*2
+                            await ctx.channel.send('CRIT')
+                            for c in f.chars:
+                                    c.stress-=random.randint(0,4)
+                                    if c.stress<0:
+                                        c.stress=0
+                        await ctx.channel.send(f'dealing {dmg} dmg')
+                        f.cmonsters[rank-1].hp-=(dmg-dmg*f.cmonsters[rank-1].protection)
+                        if f.cmonsters[rank-1].hp<0:
+                            for m in order:
+                                if m[0].id==f.cmonsters[rank-1].id:
+                                    order.remove(m)
+                                    f.cmonsters.remove(m)
+                                await ctx.channel.send('killing blow')
                 await asyncio.sleep(2)
             i+=1
         await ctx.channel.send('next turn')
@@ -696,3 +773,4 @@ async def on_ready():
     print('ready')
     reminder.start()
     testing.start()
+client.run('token')
