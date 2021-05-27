@@ -69,16 +69,22 @@ class fight_class():
         for i in monsters:
             if self.back in i.locations:
                 avail.append(deepcopy(i))
-        while(len(self.cmonsters)!=4):
-            self.cmonsters.append(avail[random.randint(0,len(avail)-1)])
+        while(len(self.cmonsters)<4):
+            self.cmonsters.append(deepcopy(avail[random.randint(0,len(avail)-1)]))
             self.cmonsters[-1].id=random.choice(self.ids)
             self.ids.remove(self.cmonsters[-1].id)
-            if(sum(c.size for c in self.cmonsters)>4):
-                self.cmonsters.pop(len(self.cmonsters)-1)
+            for o in range(0,self.cmonsters[-1].size-1):
+                app = self.cmonsters[-1]
+                self.cmonsters.append(app)
+            if len(self.cmonsters)>4:
+                for m in range(self.cmonsters[-1].size):
+                    self.cmonsters.pop(-1)
+            if len(self.ids)<4:
                 break
         self.chars = []
         for i in self.cmonsters:
             print(i.name)
+            print(i.id)
     def __del__(self):
         print('The end')
 class monster:
@@ -349,7 +355,7 @@ f = object()
 @client.command()
 async def help(ctx,option=None):
     if(option=='fight'):
-        embed = discord.Embed(title='fight',description='Darkest Dungeon Combat Simulator version: alpha 0.0.6',colour = discord.Colour.green())
+        embed = discord.Embed(title='fight',description='Darkest Dungeon Combat Simulator version: alpha 0.0.8',colour = discord.Colour.green())
         embed.add_field(name='fight *location*',value='starts a new fight in *location*. No given location will start in random place',inline=True)
         embed.add_field(name='retreat',value='retreats from the fight',inline=True)
         embed.add_field(name='show',value='shows the composition of characters and enemies',inline=True)
@@ -426,14 +432,14 @@ async def start(ctx):
                 for j in order[i][0].skills:
                     if pos in j.ranks and j.type != 'support' and not any([[k for k in j.target] == [l for l in range(len(f.chars))]]):
                         available.append(j)
-                    if pos in j.ranks and j.type == 'support' and not any([[k for k in j.target] == [l for l in range(sum(d.size for d in f.cmonsters))]]):
+                    if pos in j.ranks and j.type == 'support' and not any([[k for k in j.target] == [l for l in range(len(f.cmonsters))]]):
                         available.append(j)
                 if not available:
                     await ctx.channel.send(f'{order[i][0].name} passes')
                     continue
                 used_skill = random.choice(available)
                 for j in used_skill.target:
-                    if j > len(f.cmonsters) and j < 10 and used_skill.type='support':
+                    if j > len(f.cmonsters) and j < 10 and used_skill.type=='support':
                         used_skill.target.remove(j)
                     if j > len(f.chars) and j < 10 and used_skill.type!='support':
                         used_skill.target.remove(j)
@@ -456,7 +462,7 @@ async def start(ctx):
                             if f.cmonsters[inc-1].hp>f.cmonsters[inc-1].max_hp:
                                 f.cmonsters[inc-1].hp=f.cmonsters[inc-1].max_hp
                             rank-=inc
-                            inc+=1
+                            inc+=f.cmonsters[inc-1].size
                     elif rank==0:
                         for m in f.cmonsters:
                             if m.id == order[i][0].id:
@@ -503,7 +509,7 @@ async def start(ctx):
                             if f.chars[inc-1][1].hp<=0:
                                 f.chars[inc-1][1].hp=0
                                 if random.random()>f.chars[inc-1][1].death_blow:
-                                    for o in order:
+                                    for c in order:
                                         if c[0][1].id==f.chars[inc-1][1].id:
                                             order.remove(c)
                                             break
@@ -547,7 +553,6 @@ async def start(ctx):
                         else: 
                             f.chars[rank-1][1].hp-=damage
                 await show(ctx)
-                await asyncio.sleep(2)
             else:
                 user = discord.utils.get(ctx.channel.guild.members, id=order[i][0][0])
                 available = []
@@ -558,7 +563,7 @@ async def start(ctx):
                     if pos in j.ranks and j.type == 'support' and not any([[k for k in j.target] == [l for l in range(len(f.chars))]]):
                         available.append(j)
                         names.append(j.name)
-                    if pos in j.ranks and j.type != 'support' and not any([[k for k in j.target] == [l for l in range(sum(d.size for d in f.cmonsters))]]):
+                    if pos in j.ranks and j.type != 'support' and not any([[k for k in j.target] == [l for l in range(len(f.cmonsters))]]):
                         available.append(j)
                         names.append(j.name)
                 embed = discord.Embed(title=f"{order[i][0][1].name}",description="write name to use",colour = discord.Colour.green())
@@ -580,7 +585,9 @@ async def start(ctx):
                         break
                 if len(used_skill.target)<10:
                     for j in used_skill.target:
-                        if j > len(f.cmonsters) and j < 10:
+                        if j > len(f.cmonsters) and j < 10 and used_skill.type!='support':
+                            used_skill.target.remove(j)
+                        if j > len(f.chars) and j < 10 and used_skill.type=='support':
                             used_skill.target.remove(j)
                     embed = discord.Embed(title="Ranks",description=f"{used_skill.target}",colour = discord.Colour.green())
                     await ctx.channel.send(embed=embed)
@@ -603,7 +610,7 @@ async def start(ctx):
                             if random.random() > used_skill.acc-f.cmonsters[inc-1].dodge:
                                 i+=1
                                 rank-=inc
-                                inc+=1
+                                inc+=f.cmonsters[inc-1].size
                                 await ctx.channel.send('MISS')
                                 continue
                             if random.random() < used_skill.crit_mod:
@@ -618,11 +625,11 @@ async def start(ctx):
                             if f.cmonsters[inc-1].hp<0:
                                 for m in order:
                                     if m[0].id==f.cmonsters[inc-1].id:
-                                        order.remove(m)
-                                        f.cmonsters.remove(m)
-                                await ctx.channel.send('killing blow')
+                                        order.remove(m[0])
+                                        f.cmonsters.remove(m[0])
+                                        await ctx.channel.send('killing blow')
                             rank-=inc
-                            inc+=1
+                            inc+=f.cmonsters[inc-1].size
                     else:
                         dmg = used_skill.dmg()
                         await ctx.channel.send(f'{order[i][0][1].name} uses {used_skill.name} against {f.cmonsters[rank-1].name}')
@@ -642,10 +649,10 @@ async def start(ctx):
                         if f.cmonsters[rank-1].hp<0:
                             for m in order:
                                 if m[0].id==f.cmonsters[rank-1].id:
-                                    order.remove(m)
-                                    f.cmonsters.remove(m)
-                                await ctx.channel.send('killing blow')
-                await asyncio.sleep(2)
+                                    order.remove(m[0])
+                                    f.cmonsters.remove(m[0])
+                                    await ctx.channel.send('killing blow')
+                await show(ctx)
             i+=1
         await ctx.channel.send('next turn')
         await asyncio.sleep(3)
@@ -656,8 +663,10 @@ async def start(ctx):
 async def show(ctx):
     images = []
     embed = discord.Embed(title='Round',colour = discord.Colour.green())
-    for i in f.cmonsters:
-        images.append(Image.open(i.name+'.png'))
+    i=len(f.cmonsters)-1
+    while i >= 0:
+        images.append(Image.open(f.cmonsters[i].name+'.png'))
+        i-=f.cmonsters[i].size
     new_im = Image.new('RGBA', (1000, 300))
     x_offset = 0
     back_width = 0
@@ -683,8 +692,10 @@ async def show(ctx):
     for i in range(len(f.chars)-1,-1,-1):
         embed.add_field(name=f.chars[i][2],value=f'HP: {f.chars[i][1].hp}/{f.chars[i][1].max_hp}\nSTRESS: {f.chars[i][1].stress}',inline=True)
     embed.add_field(name='```Monsters```',value='``` ```',inline=False)
-    for i in f.cmonsters:
-        embed.add_field(name=i.name,value=f'HP: {i.hp}/{i.max_hp}',inline=True)
+    i=len(f.cmonsters)-1
+    while i >= 0:
+        embed.add_field(name=f.cmonsters[i].name,value=f'HP: {f.cmonsters[i].hp}/{f.cmonsters[i].max_hp}',inline=True)
+        i-=(f.cmonsters[i].size)
     await ctx.channel.send(file=discord.File('fight.png'))
     await ctx.channel.send(embed=embed)
 @client.command()
