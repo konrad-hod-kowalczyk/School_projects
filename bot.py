@@ -84,7 +84,6 @@ class fight_class():
         self.chars = []
         for i in self.cmonsters:
             print(i.name)
-            print(i.id)
     def __del__(self):
         print('The end')
 class monster:
@@ -436,6 +435,7 @@ async def start(ctx):
                         available.append(j)
                 if not available:
                     await ctx.channel.send(f'{order[i][0].name} passes')
+                    i+=1
                     continue
                 used_skill = random.choice(available)
                 for j in used_skill.target:
@@ -475,6 +475,7 @@ async def start(ctx):
                                 m.hp-=heal
                                 if m.hp>m.max_hp:
                                     m.hp=m.max_hp
+                                break
                     else:
                         heal = used_skill.dmg()
                         await ctx.channel.send(f'{order[i][0].name} uses {used_skill.name} against {f.cmonsters[rank-1].name}')
@@ -495,7 +496,7 @@ async def start(ctx):
                         while(rank>10 or inc+1<len(f.chars)):
                             damage = int(used_skill.dmg()*(1-f.chars[inc-1][1].prot))
                             await ctx.channel.send(f'{order[i][0].name} uses {used_skill.name} against {f.chars[inc-1][2]} the {f.chars[inc-1][1].name}')
-                            if random.random()>used_skill.acc-f.chars[inc-1][1].dodge:
+                            if random.random()<used_skill.acc-f.chars[inc-1][1].dodge:
                                 rank-=inc
                                 inc+=1
                                 await ctx.channel.send('MISS')
@@ -527,7 +528,7 @@ async def start(ctx):
                     else:
                         damage = int(used_skill.dmg()*(1-f.chars[rank-1][1].prot))
                         await ctx.channel.send(f'{order[i][0].name} uses {used_skill.name} against {f.chars[rank-1][2]} the {f.chars[rank-1][1].name}')
-                        if random.random()>used_skill.acc-f.chars[rank-1][1].dodge:
+                        if random.random()<used_skill.acc-f.chars[rank-1][1].dodge:
                             await ctx.channel.send('MISS')
                             i+=1
                             continue
@@ -583,7 +584,7 @@ async def start(ctx):
                     if j.name == msg.content:
                         used_skill=j
                         break
-                if len(used_skill.target)<10:
+                if len(used_skill.target)>1:
                     for j in used_skill.target:
                         if j > len(f.cmonsters) and j < 10 and used_skill.type!='support':
                             used_skill.target.remove(j)
@@ -594,7 +595,7 @@ async def start(ctx):
                     def check2(m):
                         return int(m.content) in used_skill.target and m.channel==ctx.channel and m.author.id==order[i][0][0] and int(m.content) <= len(f.cmonsters)
                     msg2 = await client.wait_for('message',check=check2)
-                    rank = (int(msg2.content))-1
+                    rank = (int(msg2.content))
                 else:
                     rank = used.skill.target[0]
                 if used_skill.type!='support':
@@ -607,7 +608,7 @@ async def start(ctx):
                         while(rank>10 or inc+1<len(f.cmonsters)):
                             dmg = used_skill.dmg()
                             await ctx.channel.send(f'{order[i][0][1].name} uses {used_skill.name} against {f.cmonsters[inc-1].name}')
-                            if random.random() > used_skill.acc-f.cmonsters[inc-1].dodge:
+                            if random.random() < used_skill.acc-f.cmonsters[inc-1].dodge:
                                 i+=1
                                 rank-=inc
                                 inc+=f.cmonsters[inc-1].size
@@ -633,7 +634,7 @@ async def start(ctx):
                     else:
                         dmg = used_skill.dmg()
                         await ctx.channel.send(f'{order[i][0][1].name} uses {used_skill.name} against {f.cmonsters[rank-1].name}')
-                        if random.random() > used_skill.acc-f.cmonsters[rank-1].dodge:
+                        if random.random() < used_skill.acc-f.cmonsters[rank-1].dodge:
                                 await ctx.channel.send('MISS')
                                 i+=1
                                 continue
@@ -652,6 +653,55 @@ async def start(ctx):
                                     order.remove(m[0])
                                     f.cmonsters.remove(m[0])
                                     await ctx.channel.send('killing blow')
+                else:
+                    if rank>10:
+                        inc=1
+                        if rank==15 or rank==18:
+                            inc=2
+                        if rank==17:
+                            inc=3
+                        while(rank>10 or inc+1<len(f.chars)):
+                            heal = used_skill.dmg()
+                            await ctx.channel.send(f'{order[i][0][1].name} uses {used_skill.name} against {f.chars[inc-1][2]}')
+                            if random.random() < used_skill.crit_mod:
+                                heal = heal*2
+                                await ctx.channel.send('CRIT')
+                                for c in f.chars:
+                                    c.stress-=random.randint(0,4)
+                                    if c.stress<0:
+                                        c.stress=0
+                            await ctx.channel.send(f'healing {heal} dmg')
+                            f.chars[inc-1][1].hp-=heal
+                            if f.chars[inc-1][1].hp>f.chars[inc-1][1].max_hp:
+                                f.chars[inc-1][1].hp=f.chars[inc-1][1].max_hp
+                            rank-=inc
+                            inc+=1
+                    elif rank==0:
+                        for m in range(len(f.chars)):
+                            if f.chars[m][1].id == order[i][0][1].id:
+                                heal = used_skill.dmg()
+                                await ctx.channel.send(f'{order[i][0][2]} uses {used_skill.name} against self')
+                                if random.random() < used_skill.crit_mod:
+                                    heal = heal*2
+                                    await ctx.channel.send('CRIT')
+                                await ctx.channel.send(f'healing {heal} dmg')
+                                f.chars[m][1].hp-=heal
+                                if f.chars[m][1].hp>f.chars[m][1].max_hp:
+                                    f.chars[m][1].hp=f.chars[m][1].max_hp
+                    else:
+                        heal = used_skill.dmg()
+                        await ctx.channel.send(f'{order[i][0][1].name} uses {used_skill.name} against {f.chars[rank-1][2]}')
+                        if random.random() < used_skill.crit_mod:
+                            heal = heal*2
+                            await ctx.channel.send('CRIT')
+                            for c in f.chars:
+                                    c.stress-=random.randint(0,4)
+                                    if c.stress<0:
+                                        c.stress=0
+                        await ctx.channel.send(f'healing {heal} dmg')
+                        f.chars[rank-1][1].hp-=heal
+                        if f.chars[rank-1][1].hp>f.chars[rank-1][1].max_hp:
+                            f.chars[rank-1][1].hp=f.chars[rank-1][1].max_hp
                 await show(ctx)
             i+=1
         await ctx.channel.send('next turn')
@@ -783,5 +833,5 @@ async def testing():
 async def on_ready():
     print('ready')
     reminder.start()
-    testing.start()
+    #testing.start()
 client.run('token')
