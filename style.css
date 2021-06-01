@@ -517,6 +517,15 @@
 		left: 15px;
 		border-radius: 20%;
 	  }
+	.wall {
+		width:30px;
+		height:150px;
+		position: absolute;
+		background: #707070;
+		top: 150px;
+		left: 450px;
+		border: 3px solid #545454;
+	}
 	body {
 		position: absolute;
 	}
