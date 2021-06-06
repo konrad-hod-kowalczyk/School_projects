@@ -65,10 +65,15 @@ class fight_class():
                 self.back='cove'
         self.cmonsters = [];
         self.ids=[1,2,3,4,5,6,7,8]
+        self.chars = []
+        self.waves=0
+        for i in self.cmonsters:
+            print(i.name)
+    def wave(self):
         avail=[]
         for i in monsters:
-            if self.back in i.locations:
-                avail.append(deepcopy(i))
+                if self.back in i.locations:
+                    avail.append(deepcopy(i))
         while(len(self.cmonsters)<4):
             self.cmonsters.append(deepcopy(avail[random.randint(0,len(avail)-1)]))
             self.cmonsters[-1].id=random.choice(self.ids)
@@ -77,13 +82,10 @@ class fight_class():
                 app = self.cmonsters[-1]
                 self.cmonsters.append(app)
             if len(self.cmonsters)>4:
-                for m in range(self.cmonsters[-1].size):
+               for m in range(self.cmonsters[-1].size):
                     self.cmonsters.pop(-1)
             if len(self.ids)<4:
                 break
-        self.chars = []
-        for i in self.cmonsters:
-            print(i.name)
     def __del__(self):
         print('The end')
 class monster:
@@ -149,6 +151,11 @@ class skill:
         self.crit_mod = crit_mod
         self.effects = effects
         self.Self = Self
+def move(who,quantity):
+    if isinstance(who, monster):
+        print('monster')
+    else:
+        print('hero')
 monsters.append(monster('Bone_Rabble','unholy',8,0.0,0.0,1,0.1,0.1,2.0,0.15,0.1,['ruins','weald','warrens','cove'],1))
 monsters[0].skills.append(skill('Bump in the night','melee',[1,2,3],[1,2],lambda: random.randint(2,5),0,0.625,0.02,None,None))
 monsters[0].skills.append(skill('Tic-Toc','melee',[4],[1,2],lambda: random.randint(2,5),0,0.425,0.00,None,None))
@@ -379,6 +386,8 @@ async def fight(ctx, loc='None'):
     delete()
     global f
     f = fight_class(loc)
+    f.wave()
+    print([m.name for m in f.cmonsters])
     await show(ctx)
 @client.command()
 async def clear(ctx, amount=5):
@@ -413,6 +422,12 @@ async def retreat(ctx):
 async def start(ctx):
     global f
     while(1):
+        if isinstance(f,object) and not isinstance(f,fight_class):
+            await ctx.channel.send('There are no monsters')
+            break
+        if len(f.chars)<1:
+            await ctx.channel.send('There are no heroes')
+            break
         order = []
         for i in f.cmonsters:
             order.append([i,random.randint(0,8)+i.speed])
@@ -422,6 +437,13 @@ async def start(ctx):
         i=0
         while i<len(order):
         #for i in range(len(order)):
+            if len(f.cmonsters)<1:
+                f.waves+=1
+                f.wave()
+                break
+            if len(f.chars)<1:
+                await ctx.channel.send(f'You lost. Waves survived {f.waves}')
+                break
             if order[i][0] in f.cmonsters:
                 pos = 1
                 idx = f.cmonsters.index(order[i][0])
@@ -559,6 +581,7 @@ async def start(ctx):
                 available = []
                 names = []
                 names.append('pass')
+                names.append('move')
                 pos = f.chars.index(order[i][0])+1
                 for j in order[i][0][1].skills:
                     if pos in j.ranks and j.type == 'support' and not any([[k for k in j.target] == [l for l in range(len(f.chars))]]):
@@ -578,6 +601,10 @@ async def start(ctx):
                 if msg.content=='pass':
                     i+=1
                     await ctx.channel.send(f"{order[i][0][1].name} passes")
+                    continue
+                if msg.content=='move':
+                    i+=1
+                    await ctx.channel.send(f"{order[i][0][1].name} moves")
                     continue
                 used_skill=''
                 for j in order[i][0][1].skills:
@@ -625,10 +652,12 @@ async def start(ctx):
                             f.cmonsters[inc-1].hp-=(dmg-dmg*f.cmonsters[inc-1].protection)
                             if f.cmonsters[inc-1].hp<0:
                                 for m in order:
-                                    if m[0].id==f.cmonsters[inc-1].id:
-                                        order.remove(m[0])
-                                        f.cmonsters.remove(m[0])
-                                        await ctx.channel.send('killing blow')
+                                    if isinstance(m[0],monster):
+                                        if m[0].id==f.cmonsters[inc-1].id:
+                                            order.remove(m)
+                                            f.cmonsters.remove(m[0])
+                                            await ctx.channel.send('killing blow')
+                                            break
                             rank-=inc
                             inc+=f.cmonsters[inc-1].size
                     else:
@@ -642,17 +671,19 @@ async def start(ctx):
                             dmg = dmg*2
                             await ctx.channel.send('CRIT')
                             for c in f.chars:
-                                    c.stress-=random.randint(0,4)
-                                    if c.stress<0:
-                                        c.stress=0
+                                    c[1].stress-=random.randint(0,4)
+                                    if c[1].stress<0:
+                                        c[1].stress=0
                         await ctx.channel.send(f'dealing {dmg} dmg')
                         f.cmonsters[rank-1].hp-=(dmg-dmg*f.cmonsters[rank-1].protection)
                         if f.cmonsters[rank-1].hp<0:
                             for m in order:
-                                if m[0].id==f.cmonsters[rank-1].id:
-                                    order.remove(m[0])
-                                    f.cmonsters.remove(m[0])
-                                    await ctx.channel.send('killing blow')
+                                if isinstance(m[0],monster):
+                                    if m[0].id==f.cmonsters[rank-1].id:
+                                        order.remove(m)
+                                        f.cmonsters.remove(m[0])
+                                        await ctx.channel.send('killing blow')
+                                        break
                 else:
                     if rank>10:
                         inc=1
@@ -713,10 +744,10 @@ async def start(ctx):
 async def show(ctx):
     images = []
     embed = discord.Embed(title='Round',colour = discord.Colour.green())
-    i=len(f.cmonsters)-1
-    while i >= 0:
+    i=0
+    while i<len(f.cmonsters):
         images.append(Image.open(f.cmonsters[i].name+'.png'))
-        i-=f.cmonsters[i].size
+        i+=f.cmonsters[i].size
     new_im = Image.new('RGBA', (1000, 300))
     x_offset = 0
     back_width = 0
@@ -742,10 +773,10 @@ async def show(ctx):
     for i in range(len(f.chars)-1,-1,-1):
         embed.add_field(name=f.chars[i][2],value=f'HP: {f.chars[i][1].hp}/{f.chars[i][1].max_hp}\nSTRESS: {f.chars[i][1].stress}',inline=True)
     embed.add_field(name='```Monsters```',value='``` ```',inline=False)
-    i=len(f.cmonsters)-1
-    while i >= 0:
+    i=0
+    while i < len(f.cmonsters):
         embed.add_field(name=f.cmonsters[i].name,value=f'HP: {f.cmonsters[i].hp}/{f.cmonsters[i].max_hp}',inline=True)
-        i-=(f.cmonsters[i].size)
+        i+=(f.cmonsters[i].size)
     await ctx.channel.send(file=discord.File('fight.png'))
     await ctx.channel.send(embed=embed)
 @client.command()
